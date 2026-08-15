@@ -1,0 +1,818 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; =================================================
+    2 00000000         ; ========= ARRAY FUNCTIONS - ARITHMETIC  ========= 
+    3 00000000         ; =================================================
+    4 00000000         
+    5 00000000                 AREA             array_utils, CODE, READONLY
+    6 00000000                 THUMB
+    7 00000000                 PRESERVE8
+    8 00000000         
+    9 00000000         ; ==============================================
+   10 00000000         ; = EXPORTED FUNCTIONS (for use in C)
+   11 00000000         ; ==============================================
+   12 00000000                 EXPORT           Array_GetSum
+   13 00000000                 EXPORT           Array_GetAverage
+   14 00000000                 EXPORT           Array_CountAboveAverage_Byte
+   15 00000000                 EXPORT           Array_GetMax
+   16 00000000                 EXPORT           Array_Get2ndMax
+   17 00000000                 EXPORT           Array_GetMin
+   18 00000000                 EXPORT           Array_CheckStrictlyMonotonicInc
+reasing
+   19 00000000                 EXPORT           Array_CheckStrictlyMonotonicDec
+reasing
+   20 00000000                 EXPORT           Array_CheckMonotonicNonIncreasi
+ng
+   21 00000000                 EXPORT           Array_CheckMonotonicNonDecreasi
+ng
+   22 00000000         
+   23 00000000         
+   24 00000000         ; ====================
+   25 00000000         ; = GET SUM OF ARRAY =
+   26 00000000         ; ====================
+   27 00000000         ; Sums all elements of a 32-bit integer array.
+   28 00000000         ;
+   29 00000000         ; Parameters:
+   30 00000000         ;   R0 = number of elements in the array (N)
+   31 00000000         ;   R1 = pointer to the start of the array
+   32 00000000         ;
+   33 00000000         ; Returns:
+   34 00000000         ;   R0 = sum of all elements
+   35 00000000         Array_GetSum
+                               FUNCTION
+   36 00000000 E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr}
+   37 00000004         
+   38 00000004 F04F 0500       MOV              R5, #0      ; Sum = 0
+   39 00000008 2800            CMP              R0, #0
+   40 0000000A DD04            BLE              exit_sum_loop
+   41 0000000C         
+   42 0000000C         sum_loop
+   43 0000000C F851 4B04       LDR              R4, [R1], #4
+   44 00000010 4425            ADD              R5, R5, R4
+   45 00000012 1E40            SUBS             R0, R0, #1
+   46 00000014 DCFA            BGT              sum_loop
+   47 00000016         
+   48 00000016         exit_sum_loop
+   49 00000016 4628            MOV              R0, R5
+   50 00000018 E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+   51 0000001C                 ENDFUNC
+   52 0000001C         
+   53 0000001C         
+   54 0000001C         ; =========================
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   55 0000001C         ; = GET AVERAGE OF ARRAY =
+   56 0000001C         ; =========================
+   57 0000001C         ; Computes the average (integer division) of a 32-bit in
+                       teger array.
+   58 0000001C         ;
+   59 0000001C         ; Parameters:
+   60 0000001C         ;   R0 = number of elements in the array (N)
+   61 0000001C         ;   R1 = pointer to the start of the array
+   62 0000001C         ;
+   63 0000001C         ; Returns:
+   64 0000001C         ;   R0 = average of the array elements (SUM / N)
+   65 0000001C         Array_GetAverage
+                               FUNCTION
+   66 0000001C E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr}
+   67 00000020         
+   68 00000020 4606            MOV              R6, R0      ; Save original N
+   69 00000022 F04F 0500       MOV              R5, #0      ; Sum = 0
+   70 00000026 2800            CMP              R0, #0
+   71 00000028 DD04            BLE              exit_avg_loop
+   72 0000002A         
+   73 0000002A         avg_loop
+   74 0000002A F851 4B04       LDR              R4, [R1], #4
+   75 0000002E 4425            ADD              R5, R5, R4
+   76 00000030 1E40            SUBS             R0, R0, #1
+   77 00000032 DCFA            BGT              avg_loop
+   78 00000034         
+   79 00000034         exit_avg_loop
+   80 00000034 2E00            CMP              R6, #0
+   81 00000036 BFD4 2000       MOVLE            R0, #0
+   82 0000003A FB95 F0F6       SDIVGT           R0, R5, R6
+   83 0000003E E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+   84 00000042                 ENDFUNC
+   85 00000042         
+   86 00000042         
+   87 00000042         ; =======================================
+   88 00000042         ; = COUNT HOW MANY VALUES ABOVE AVERAGE =
+   89 00000042         ; =======================================
+   90 00000042         ; Counts how many elements in an unsigned char array are
+                        strictly greater than the average.
+   91 00000042         ;
+   92 00000042         ; Parameters:
+   93 00000042         ;   R0 = pointer to the array (unsigned char[])
+   94 00000042         ;   R1 = number of elements in the array (N)
+   95 00000042         ;
+   96 00000042         ; Returns:
+   97 00000042         ;   R0 = number of elements strictly greater than the av
+                       erage
+   98 00000042         Array_CountAboveAverage_Byte
+                               FUNCTION
+   99 00000042 E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr}
+  100 00000046         
+  101 00000046 4604            MOV              r4, r0      ; Save array base
+  102 00000048 460D            MOV              r5, r1      ; Save N
+  103 0000004A F04F 0600       MOV              r6, #0      ; sum = 0
+  104 0000004E F04F 0700       MOV              r7, #0      ; i = 0
+  105 00000052         
+  106 00000052 2900            CMP              r1, #0
+  107 00000054 DD17            BLE              exit_count_avg
+  108 00000056         
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+  109 00000056         sum_loop_ca
+  110 00000056 F814 8007       LDRB             r8, [r4, r7]
+  111 0000005A 4446            ADD              r6, r6, r8
+  112 0000005C F107 0701       ADD              r7, r7, #1
+  113 00000060 42AF            CMP              r7, r5
+  114 00000062 DBF8            BLT              sum_loop_ca
+  115 00000064         
+  116 00000064 FBB6 F8F5       UDIV             r8, r6, r5  ; avg = sum / N
+  117 00000068         
+  118 00000068 F04F 0600       MOV              r6, #0      ; counter
+  119 0000006C F04F 0700       MOV              r7, #0      ; i = 0
+  120 00000070         
+  121 00000070         count_loop
+  122 00000070 F814 9007       LDRB             r9, [r4, r7]
+  123 00000074 45C1            CMP              r9, r8
+  124 00000076 BFC8 1C76       ADDGT            r6, r6, #1
+  125 0000007A F107 0701       ADD              r7, r7, #1
+  126 0000007E 42AF            CMP              r7, r5
+  127 00000080 DBF6            BLT              count_loop
+  128 00000082         
+  129 00000082 4630            MOV              r0, r6
+  130 00000084 E001            B                exit_count_avg_byte
+  131 00000086         
+  132 00000086         exit_count_avg
+  133 00000086 F04F 0000       MOV              r0, #0
+  134 0000008A         exit_count_avg_byte
+  135 0000008A E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+  136 0000008E                 ENDFUNC
+  137 0000008E         
+  138 0000008E         
+  139 0000008E         ; ==============================
+  140 0000008E         ; = GET MAX OF ARRAY AND INDEX =
+  141 0000008E         ; ==============================
+  142 0000008E         ; Finds the maximum value in a 32-bit integer array and 
+                       its index.
+  143 0000008E         ;
+  144 0000008E         ; Parameters:
+  145 0000008E         ;   R0 = pointer to the array
+  146 0000008E         ;   R1 = number of elements in the array (N)
+  147 0000008E         ;
+  148 0000008E         ; Returns:
+  149 0000008E         ;   R0 = maximum value found
+  150 0000008E         ;   R1 = index of the maximum value
+  151 0000008E         Array_GetMax
+                               FUNCTION
+  152 0000008E E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr}
+  153 00000092         
+  154 00000092 F850 6B04       LDR              R6, [R0], #4
+  155 00000096 1E49            SUBS             R1, R1, #1
+  156 00000098 F04F 0500       MOV              R5, #0
+  157 0000009C F04F 0701       MOV              R7, #1
+  158 000000A0 DD09            BLE              exitMax
+  159 000000A2         
+  160 000000A2         loopMax
+  161 000000A2 F850 4B04       LDR              R4, [R0], #4
+  162 000000A6 42B4            CMP              R4, R6
+  163 000000A8 BFC4 4626       MOVGT            R6, R4
+  164 000000AC 463D            MOVGT            R5, R7
+  165 000000AE F107 0701       ADD              R7, R7, #1
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+  166 000000B2 1E49            SUBS             R1, R1, #1
+  167 000000B4 DCF5            BGT              loopMax
+  168 000000B6         
+  169 000000B6         exitMax
+  170 000000B6 4630            MOV              R0, R6
+  171 000000B8 4629            MOV              R1, R5
+  172 000000BA E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+  173 000000BE                 ENDFUNC
+  174 000000BE         
+  175 000000BE         
+  176 000000BE         ; ==================================
+  177 000000BE         ; = GET 2ND MAX IN ARRAY AND INDEX =
+  178 000000BE         ; ==================================
+  179 000000BE         ; Finds the second maximum value (below a given upper li
+                       mit) and its index.
+  180 000000BE         ;
+  181 000000BE         ; Parameters:
+  182 000000BE         ;   R0 = pointer to the array
+  183 000000BE         ;   R1 = number of elements in the array (N)
+  184 000000BE         ;   R2 = upper limit (values >= this are ignored)
+  185 000000BE         ;
+  186 000000BE         ; Returns:
+  187 000000BE         ;   R0 = second maximum value
+  188 000000BE         ;   R1 = index of the second maximum
+  189 000000BE         Array_Get2ndMax
+                               FUNCTION
+  190 000000BE E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr}
+  191 000000C2         
+  192 000000C2 F04F 36FF       MOV              R6, #-1
+  193 000000C6 F04F 0700       MOV              R7, #0
+  194 000000CA         
+  195 000000CA         loopSecondMax
+  196 000000CA F850 4B04       LDR              R4, [R0], #4
+  197 000000CE 4294            CMP              R4, R2
+  198 000000D0 DA03            BGE              incr
+  199 000000D2 42B4            CMP              R4, R6
+  200 000000D4 BFC4 4626       MOVGT            R6, R4
+  201 000000D8 463D            MOVGT            R5, R7
+  202 000000DA         incr
+  203 000000DA F107 0701       ADD              R7, R7, #1
+  204 000000DE 1E49            SUBS             R1, R1, #1
+  205 000000E0 DCF3            BGT              loopSecondMax
+  206 000000E2         
+  207 000000E2         exitSecondMax
+  208 000000E2 4630            MOV              R0, R6
+  209 000000E4 4629            MOV              R1, R5
+  210 000000E6 E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+  211 000000EA                 ENDFUNC
+  212 000000EA         
+  213 000000EA         
+  214 000000EA         ; ==============================
+  215 000000EA         ; = GET MIN OF ARRAY AND INDEX =
+  216 000000EA         ; ==============================
+  217 000000EA         ; Finds the minimum value in a 32-bit integer array and 
+                       its index.
+  218 000000EA         ;
+  219 000000EA         ; Parameters:
+  220 000000EA         ;   R0 = pointer to the array
+  221 000000EA         ;   R1 = number of elements in the array (N)
+
+
+
+ARM Macro Assembler    Page 5 
+
+
+  222 000000EA         ;
+  223 000000EA         ; Returns:
+  224 000000EA         ;   R0 = minimum value found
+  225 000000EA         ;   R1 = index of the minimum value
+  226 000000EA         Array_GetMin
+                               FUNCTION
+  227 000000EA E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr}
+  228 000000EE         
+  229 000000EE F850 6B04       LDR              R6, [R0], #4
+  230 000000F2 F04F 0500       MOV              R5, #0
+  231 000000F6 F04F 0701       MOV              R7, #1
+  232 000000FA 1E49            SUBS             R1, R1, #1
+  233 000000FC DD09            BLE              exitMin
+  234 000000FE         
+  235 000000FE         loopMin
+  236 000000FE F850 4B04       LDR              R4, [R0], #4
+  237 00000102 42B4            CMP              R4, R6
+  238 00000104 BFBC 4626       MOVLT            R6, R4
+  239 00000108 463D            MOVLT            R5, R7
+  240 0000010A F107 0701       ADD              R7, R7, #1
+  241 0000010E 1E49            SUBS             R1, R1, #1
+  242 00000110 DCF5            BGT              loopMin
+  243 00000112         
+  244 00000112         exitMin
+  245 00000112 4630            MOV              R0, R6
+  246 00000114 4629            MOV              R1, R5
+  247 00000116 E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+  248 0000011A                 ENDFUNC
+  249 0000011A         
+  250 0000011A         
+  251 0000011A         ; ==============================================
+  252 0000011A         ; = IS ARRAY STRICTLY MONOTONIC INCREASING?    =
+  253 0000011A         ; ==============================================
+  254 0000011A         ; Checks if the array is strictly increasing (each eleme
+                       nt > previous).
+  255 0000011A         ;
+  256 0000011A         ; Parameters:
+  257 0000011A         ;   R0 = pointer to the array
+  258 0000011A         ;   R1 = number of elements in the array (N)
+  259 0000011A         ;
+  260 0000011A         ; Returns:
+  261 0000011A         ;   R0 = 1 if strictly increasing
+  262 0000011A         ;        0 otherwise
+  263 0000011A         Array_CheckStrictlyMonotonicIncreasing
+                               FUNCTION
+  264 0000011A E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr}
+  265 0000011E         
+  266 0000011E 2902            CMP              r1, #2
+  267 00000120 DB0B            BLT              strict_inc_true
+  268 00000122         
+  269 00000122 F850 4B04       LDR              r4, [r0], #4
+  270 00000126 1E49            SUBS             r1, r1, #1
+  271 00000128         
+  272 00000128         strict_inc_loop
+  273 00000128 F850 5B04       LDR              r5, [r0], #4
+  274 0000012C 42AC            CMP              r4, r5
+  275 0000012E BFA8 2000       MOVGE            r0, #0
+  276 00000132 DA04            BGE              strict_inc_exit
+  277 00000134 462C            MOV              r4, r5
+
+
+
+ARM Macro Assembler    Page 6 
+
+
+  278 00000136 1E49            SUBS             r1, r1, #1
+  279 00000138 DCF6            BGT              strict_inc_loop
+  280 0000013A         
+  281 0000013A         strict_inc_true
+  282 0000013A F04F 0001       MOV              r0, #1
+  283 0000013E         strict_inc_exit
+  284 0000013E E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+  285 00000142                 ENDFUNC
+  286 00000142         
+  287 00000142         
+  288 00000142         ; ==============================================
+  289 00000142         ; = IS ARRAY STRICTLY MONOTONIC DECREASING?    =
+  290 00000142         ; ==============================================
+  291 00000142         ; Checks if the array is strictly decreasing (each eleme
+                       nt < previous).
+  292 00000142         ;
+  293 00000142         ; Parameters:
+  294 00000142         ;   R0 = pointer to the array
+  295 00000142         ;   R1 = number of elements in the array (N)
+  296 00000142         ;
+  297 00000142         ; Returns:
+  298 00000142         ;   R0 = 1 if strictly decreasing
+  299 00000142         ;        0 otherwise
+  300 00000142         Array_CheckStrictlyMonotonicDecreasing
+                               FUNCTION
+  301 00000142 E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr}
+  302 00000146         
+  303 00000146 2902            CMP              r1, #2
+  304 00000148 DB0B            BLT              strict_dec_true
+  305 0000014A         
+  306 0000014A F850 4B04       LDR              r4, [r0], #4
+  307 0000014E 1E49            SUBS             r1, r1, #1
+  308 00000150         
+  309 00000150         strict_dec_loop
+  310 00000150 F850 5B04       LDR              r5, [r0], #4
+  311 00000154 42AC            CMP              r4, r5
+  312 00000156 BFD8 2000       MOVLE            r0, #0
+  313 0000015A DD04            BLE              strict_dec_exit
+  314 0000015C 462C            MOV              r4, r5
+  315 0000015E 1E49            SUBS             r1, r1, #1
+  316 00000160 DCF6            BGT              strict_dec_loop
+  317 00000162         
+  318 00000162         strict_dec_true
+  319 00000162 F04F 0001       MOV              r0, #1
+  320 00000166         strict_dec_exit
+  321 00000166 E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+  322 0000016A                 ENDFUNC
+  323 0000016A         
+  324 0000016A         
+  325 0000016A         ; ===============================================
+  326 0000016A         ; = IS ARRAY NON-INCREASING (LOOSE DECREASING)? =
+  327 0000016A         ; ===============================================
+  328 0000016A         ; Checks if the array is non-increasing (each element <=
+                        previous).
+  329 0000016A         ;
+  330 0000016A         ; Parameters:
+  331 0000016A         ;   R0 = pointer to the array
+  332 0000016A         ;   R1 = number of elements in the array (N)
+  333 0000016A         ;
+
+
+
+ARM Macro Assembler    Page 7 
+
+
+  334 0000016A         ; Returns:
+  335 0000016A         ;   R0 = 1 if non-increasing (loose decreasing)
+  336 0000016A         ;        0 otherwise
+  337 0000016A         Array_CheckMonotonicNonIncreasing
+                               FUNCTION
+  338 0000016A E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr}
+  339 0000016E         
+  340 0000016E 2902            CMP              r1, #2
+  341 00000170 DB0B            BLT              non_inc_true
+  342 00000172         
+  343 00000172 F850 4B04       LDR              r4, [r0], #4
+  344 00000176 1E49            SUBS             r1, r1, #1
+  345 00000178         
+  346 00000178         non_inc_loop
+  347 00000178 F850 5B04       LDR              r5, [r0], #4
+  348 0000017C 42AC            CMP              r4, r5
+  349 0000017E BFB8 2000       MOVLT            r0, #0
+  350 00000182 DB04            BLT              non_inc_exit
+  351 00000184 462C            MOV              r4, r5
+  352 00000186 1E49            SUBS             r1, r1, #1
+  353 00000188 DCF6            BGT              non_inc_loop
+  354 0000018A         
+  355 0000018A         non_inc_true
+  356 0000018A F04F 0001       MOV              r0, #1
+  357 0000018E         non_inc_exit
+  358 0000018E E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+  359 00000192                 ENDFUNC
+  360 00000192         
+  361 00000192         
+  362 00000192         ; ===============================================
+  363 00000192         ; = IS ARRAY NON-DECREASING (LOOSE INCREASING)? =
+  364 00000192         ; ===============================================
+  365 00000192         ; Checks if the array is non-decreasing (each element >=
+                        previous).
+  366 00000192         ;
+  367 00000192         ; Parameters:
+  368 00000192         ;   R0 = pointer to the array
+  369 00000192         ;   R1 = number of elements in the array (N)
+  370 00000192         ;
+  371 00000192         ; Returns:
+  372 00000192         ;   R0 = 1 if non-decreasing (loose increasing)
+  373 00000192         ;        0 otherwise
+  374 00000192         Array_CheckMonotonicNonDecreasing
+                               FUNCTION
+  375 00000192 E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr}
+  376 00000196         
+  377 00000196 2902            CMP              r1, #2
+  378 00000198 DB0B            BLT              non_dec_true
+  379 0000019A         
+  380 0000019A F850 4B04       LDR              r4, [r0], #4
+  381 0000019E 1E49            SUBS             r1, r1, #1
+  382 000001A0         
+  383 000001A0         non_dec_loop
+  384 000001A0 F850 5B04       LDR              r5, [r0], #4
+  385 000001A4 42AC            CMP              r4, r5
+  386 000001A6 BFC8 2000       MOVGT            r0, #0
+  387 000001AA DC04            BGT              non_dec_exit
+  388 000001AC 462C            MOV              r4, r5
+  389 000001AE 1E49            SUBS             r1, r1, #1
+
+
+
+ARM Macro Assembler    Page 8 
+
+
+  390 000001B0 DCF6            BGT              non_dec_loop
+  391 000001B2         
+  392 000001B2         non_dec_true
+  393 000001B2 F04F 0001       MOV              r0, #1
+  394 000001B6         non_dec_exit
+  395 000001B6 E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+  396 000001BA                 ENDFUNC
+  397 000001BA         
+  398 000001BA                 END
+Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M3 --depe
+nd=.\output\array_arith.d -o.\output\array_arith.o -I.\RTE\_LandTiger_LPC1768__
+release_ -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include -IC:\Keil_v5\
+ARM\PACK\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__EVAL SETA 1" --pr
+edefine="__UVISION_VERSION SETA 540" --predefine="LPC175x_6x SETA 1" --predefin
+e="_RTE_ SETA 1" --list=.\output\array_arith.lst array_arith.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Array_CheckMonotonicNonDecreasing 00000192
+
+Symbol: Array_CheckMonotonicNonDecreasing
+   Definitions
+      At line 374 in file array_arith.s
+   Uses
+      At line 21 in file array_arith.s
+Comment: Array_CheckMonotonicNonDecreasing used once
+Array_CheckMonotonicNonIncreasing 0000016A
+
+Symbol: Array_CheckMonotonicNonIncreasing
+   Definitions
+      At line 337 in file array_arith.s
+   Uses
+      At line 20 in file array_arith.s
+Comment: Array_CheckMonotonicNonIncreasing used once
+Array_CheckStrictlyMonotonicDecreasing 00000142
+
+Symbol: Array_CheckStrictlyMonotonicDecreasing
+   Definitions
+      At line 300 in file array_arith.s
+   Uses
+      At line 19 in file array_arith.s
+Comment: Array_CheckStrictlyMonotonicDecreasing used once
+Array_CheckStrictlyMonotonicIncreasing 0000011A
+
+Symbol: Array_CheckStrictlyMonotonicIncreasing
+   Definitions
+      At line 263 in file array_arith.s
+   Uses
+      At line 18 in file array_arith.s
+Comment: Array_CheckStrictlyMonotonicIncreasing used once
+Array_CountAboveAverage_Byte 00000042
+
+Symbol: Array_CountAboveAverage_Byte
+   Definitions
+      At line 98 in file array_arith.s
+   Uses
+      At line 14 in file array_arith.s
+Comment: Array_CountAboveAverage_Byte used once
+Array_Get2ndMax 000000BE
+
+Symbol: Array_Get2ndMax
+   Definitions
+      At line 189 in file array_arith.s
+   Uses
+      At line 16 in file array_arith.s
+Comment: Array_Get2ndMax used once
+Array_GetAverage 0000001C
+
+Symbol: Array_GetAverage
+   Definitions
+      At line 65 in file array_arith.s
+   Uses
+      At line 13 in file array_arith.s
+Comment: Array_GetAverage used once
+Array_GetMax 0000008E
+
+Symbol: Array_GetMax
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+   Definitions
+      At line 151 in file array_arith.s
+   Uses
+      At line 15 in file array_arith.s
+Comment: Array_GetMax used once
+Array_GetMin 000000EA
+
+Symbol: Array_GetMin
+   Definitions
+      At line 226 in file array_arith.s
+   Uses
+      At line 17 in file array_arith.s
+Comment: Array_GetMin used once
+Array_GetSum 00000000
+
+Symbol: Array_GetSum
+   Definitions
+      At line 35 in file array_arith.s
+   Uses
+      At line 12 in file array_arith.s
+Comment: Array_GetSum used once
+array_utils 00000000
+
+Symbol: array_utils
+   Definitions
+      At line 5 in file array_arith.s
+   Uses
+      None
+Comment: array_utils unused
+avg_loop 0000002A
+
+Symbol: avg_loop
+   Definitions
+      At line 73 in file array_arith.s
+   Uses
+      At line 77 in file array_arith.s
+Comment: avg_loop used once
+count_loop 00000070
+
+Symbol: count_loop
+   Definitions
+      At line 121 in file array_arith.s
+   Uses
+      At line 127 in file array_arith.s
+Comment: count_loop used once
+exitMax 000000B6
+
+Symbol: exitMax
+   Definitions
+      At line 169 in file array_arith.s
+   Uses
+      At line 158 in file array_arith.s
+Comment: exitMax used once
+exitMin 00000112
+
+Symbol: exitMin
+   Definitions
+      At line 244 in file array_arith.s
+   Uses
+
+
+
+ARM Macro Assembler    Page 3 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 233 in file array_arith.s
+Comment: exitMin used once
+exitSecondMax 000000E2
+
+Symbol: exitSecondMax
+   Definitions
+      At line 207 in file array_arith.s
+   Uses
+      None
+Comment: exitSecondMax unused
+exit_avg_loop 00000034
+
+Symbol: exit_avg_loop
+   Definitions
+      At line 79 in file array_arith.s
+   Uses
+      At line 71 in file array_arith.s
+Comment: exit_avg_loop used once
+exit_count_avg 00000086
+
+Symbol: exit_count_avg
+   Definitions
+      At line 132 in file array_arith.s
+   Uses
+      At line 107 in file array_arith.s
+Comment: exit_count_avg used once
+exit_count_avg_byte 0000008A
+
+Symbol: exit_count_avg_byte
+   Definitions
+      At line 134 in file array_arith.s
+   Uses
+      At line 130 in file array_arith.s
+Comment: exit_count_avg_byte used once
+exit_sum_loop 00000016
+
+Symbol: exit_sum_loop
+   Definitions
+      At line 48 in file array_arith.s
+   Uses
+      At line 40 in file array_arith.s
+Comment: exit_sum_loop used once
+incr 000000DA
+
+Symbol: incr
+   Definitions
+      At line 202 in file array_arith.s
+   Uses
+      At line 198 in file array_arith.s
+Comment: incr used once
+loopMax 000000A2
+
+Symbol: loopMax
+   Definitions
+      At line 160 in file array_arith.s
+   Uses
+      At line 167 in file array_arith.s
+Comment: loopMax used once
+loopMin 000000FE
+
+
+
+ARM Macro Assembler    Page 4 Alphabetic symbol ordering
+Relocatable symbols
+
+
+Symbol: loopMin
+   Definitions
+      At line 235 in file array_arith.s
+   Uses
+      At line 242 in file array_arith.s
+Comment: loopMin used once
+loopSecondMax 000000CA
+
+Symbol: loopSecondMax
+   Definitions
+      At line 195 in file array_arith.s
+   Uses
+      At line 205 in file array_arith.s
+Comment: loopSecondMax used once
+non_dec_exit 000001B6
+
+Symbol: non_dec_exit
+   Definitions
+      At line 394 in file array_arith.s
+   Uses
+      At line 387 in file array_arith.s
+Comment: non_dec_exit used once
+non_dec_loop 000001A0
+
+Symbol: non_dec_loop
+   Definitions
+      At line 383 in file array_arith.s
+   Uses
+      At line 390 in file array_arith.s
+Comment: non_dec_loop used once
+non_dec_true 000001B2
+
+Symbol: non_dec_true
+   Definitions
+      At line 392 in file array_arith.s
+   Uses
+      At line 378 in file array_arith.s
+Comment: non_dec_true used once
+non_inc_exit 0000018E
+
+Symbol: non_inc_exit
+   Definitions
+      At line 357 in file array_arith.s
+   Uses
+      At line 350 in file array_arith.s
+Comment: non_inc_exit used once
+non_inc_loop 00000178
+
+Symbol: non_inc_loop
+   Definitions
+      At line 346 in file array_arith.s
+   Uses
+      At line 353 in file array_arith.s
+Comment: non_inc_loop used once
+non_inc_true 0000018A
+
+Symbol: non_inc_true
+   Definitions
+
+
+
+ARM Macro Assembler    Page 5 Alphabetic symbol ordering
+Relocatable symbols
+
+      At line 355 in file array_arith.s
+   Uses
+      At line 341 in file array_arith.s
+Comment: non_inc_true used once
+strict_dec_exit 00000166
+
+Symbol: strict_dec_exit
+   Definitions
+      At line 320 in file array_arith.s
+   Uses
+      At line 313 in file array_arith.s
+Comment: strict_dec_exit used once
+strict_dec_loop 00000150
+
+Symbol: strict_dec_loop
+   Definitions
+      At line 309 in file array_arith.s
+   Uses
+      At line 316 in file array_arith.s
+Comment: strict_dec_loop used once
+strict_dec_true 00000162
+
+Symbol: strict_dec_true
+   Definitions
+      At line 318 in file array_arith.s
+   Uses
+      At line 304 in file array_arith.s
+Comment: strict_dec_true used once
+strict_inc_exit 0000013E
+
+Symbol: strict_inc_exit
+   Definitions
+      At line 283 in file array_arith.s
+   Uses
+      At line 276 in file array_arith.s
+Comment: strict_inc_exit used once
+strict_inc_loop 00000128
+
+Symbol: strict_inc_loop
+   Definitions
+      At line 272 in file array_arith.s
+   Uses
+      At line 279 in file array_arith.s
+Comment: strict_inc_loop used once
+strict_inc_true 0000013A
+
+Symbol: strict_inc_true
+   Definitions
+      At line 281 in file array_arith.s
+   Uses
+      At line 267 in file array_arith.s
+Comment: strict_inc_true used once
+sum_loop 0000000C
+
+Symbol: sum_loop
+   Definitions
+      At line 42 in file array_arith.s
+   Uses
+      At line 46 in file array_arith.s
+
+
+
+ARM Macro Assembler    Page 6 Alphabetic symbol ordering
+Relocatable symbols
+
+Comment: sum_loop used once
+sum_loop_ca 00000056
+
+Symbol: sum_loop_ca
+   Definitions
+      At line 109 in file array_arith.s
+   Uses
+      At line 114 in file array_arith.s
+Comment: sum_loop_ca used once
+38 symbols
+372 symbols in table

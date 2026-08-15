@@ -1,0 +1,2590 @@
+# 1 "GLCD/GLCD.c"
+# 1 "<built-in>" 1
+# 1 "<built-in>" 3
+# 394 "<built-in>" 3
+# 1 "<command line>" 1
+# 1 "<built-in>" 2
+# 1 "GLCD/GLCD.c" 2
+# 23 "GLCD/GLCD.c"
+# 1 "GLCD\\GLCD.h" 1
+# 26 "GLCD\\GLCD.h"
+# 1 "C:/Keil_v5/ARM/PACK/Keil/LPC1700_DFP/2.7.1/Device/Include\\LPC17xx.h" 1
+# 41 "C:/Keil_v5/ARM/PACK/Keil/LPC1700_DFP/2.7.1/Device/Include\\LPC17xx.h"
+typedef enum IRQn
+{
+
+  Reset_IRQn = -15,
+  NonMaskableInt_IRQn = -14,
+  HardFault_IRQn = -13,
+  MemoryManagement_IRQn = -12,
+  BusFault_IRQn = -11,
+  UsageFault_IRQn = -10,
+  SVCall_IRQn = -5,
+  DebugMonitor_IRQn = -4,
+  PendSV_IRQn = -2,
+  SysTick_IRQn = -1,
+
+
+  WDT_IRQn = 0,
+  TIMER0_IRQn = 1,
+  TIMER1_IRQn = 2,
+  TIMER2_IRQn = 3,
+  TIMER3_IRQn = 4,
+  UART0_IRQn = 5,
+  UART1_IRQn = 6,
+  UART2_IRQn = 7,
+  UART3_IRQn = 8,
+  PWM1_IRQn = 9,
+  I2C0_IRQn = 10,
+  I2C1_IRQn = 11,
+  I2C2_IRQn = 12,
+  SPI_IRQn = 13,
+  SSP0_IRQn = 14,
+  SSP1_IRQn = 15,
+  PLL0_IRQn = 16,
+  RTC_IRQn = 17,
+  EINT0_IRQn = 18,
+  EINT1_IRQn = 19,
+  EINT2_IRQn = 20,
+  EINT3_IRQn = 21,
+  ADC_IRQn = 22,
+  BOD_IRQn = 23,
+  USB_IRQn = 24,
+  CAN_IRQn = 25,
+  DMA_IRQn = 26,
+  I2S_IRQn = 27,
+  ENET_IRQn = 28,
+  RIT_IRQn = 29,
+  MCPWM_IRQn = 30,
+  QEI_IRQn = 31,
+  PLL1_IRQn = 32,
+  USBActivity_IRQn = 33,
+  CANActivity_IRQn = 34,
+} IRQn_Type;
+# 106 "C:/Keil_v5/ARM/PACK/Keil/LPC1700_DFP/2.7.1/Device/Include\\LPC17xx.h"
+# 1 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 1
+# 27 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+
+
+
+
+
+
+
+# 1 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\stdint.h" 1 3
+# 56 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\stdint.h" 3
+typedef signed char int8_t;
+typedef signed short int int16_t;
+typedef signed int int32_t;
+typedef signed long long int int64_t;
+
+
+typedef unsigned char uint8_t;
+typedef unsigned short int uint16_t;
+typedef unsigned int uint32_t;
+typedef unsigned long long int uint64_t;
+
+
+
+
+
+typedef signed char int_least8_t;
+typedef signed short int int_least16_t;
+typedef signed int int_least32_t;
+typedef signed long long int int_least64_t;
+
+
+typedef unsigned char uint_least8_t;
+typedef unsigned short int uint_least16_t;
+typedef unsigned int uint_least32_t;
+typedef unsigned long long int uint_least64_t;
+
+
+
+
+typedef signed int int_fast8_t;
+typedef signed int int_fast16_t;
+typedef signed int int_fast32_t;
+typedef signed long long int int_fast64_t;
+
+
+typedef unsigned int uint_fast8_t;
+typedef unsigned int uint_fast16_t;
+typedef unsigned int uint_fast32_t;
+typedef unsigned long long int uint_fast64_t;
+
+
+
+
+
+
+typedef signed int intptr_t;
+typedef unsigned int uintptr_t;
+
+
+
+typedef signed long long intmax_t;
+typedef unsigned long long uintmax_t;
+# 35 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 2 3
+# 63 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+# 1 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_version.h" 1 3
+# 27 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_version.h" 3
+# 64 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 2 3
+# 116 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+# 1 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_compiler.h" 1 3
+# 32 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_compiler.h" 3
+# 1 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_armclang.h" 1 3
+# 29 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_armclang.h" 3
+
+
+# 1 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\arm_acle.h" 1 3
+# 45 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\arm_acle.h" 3
+static __inline__ void __attribute__((__always_inline__, __nodebug__)) __wfi(void) {
+  __builtin_arm_wfi();
+}
+
+
+
+static __inline__ void __attribute__((__always_inline__, __nodebug__)) __wfe(void) {
+  __builtin_arm_wfe();
+}
+
+
+
+static __inline__ void __attribute__((__always_inline__, __nodebug__)) __sev(void) {
+  __builtin_arm_sev();
+}
+
+
+
+static __inline__ void __attribute__((__always_inline__, __nodebug__)) __sevl(void) {
+  __builtin_arm_sevl();
+}
+
+
+
+static __inline__ void __attribute__((__always_inline__, __nodebug__)) __yield(void) {
+  __builtin_arm_yield();
+}
+
+
+
+
+
+
+
+static __inline__ uint32_t __attribute__((__always_inline__, __nodebug__))
+__swp(uint32_t __x, volatile uint32_t *__p) {
+  uint32_t v;
+  do
+    v = __builtin_arm_ldrex(__p);
+  while (__builtin_arm_strex(__x, __p));
+  return v;
+}
+# 113 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\arm_acle.h" 3
+static __inline__ void __attribute__((__always_inline__, __nodebug__)) __nop(void) {
+  __builtin_arm_nop();
+}
+
+
+
+
+
+static __inline__ uint32_t __attribute__((__always_inline__, __nodebug__))
+__ror(uint32_t __x, uint32_t __y) {
+  __y %= 32;
+  if (__y == 0)
+    return __x;
+  return (__x >> __y) | (__x << (32 - __y));
+}
+
+static __inline__ uint64_t __attribute__((__always_inline__, __nodebug__))
+__rorll(uint64_t __x, uint32_t __y) {
+  __y %= 64;
+  if (__y == 0)
+    return __x;
+  return (__x >> __y) | (__x << (64 - __y));
+}
+
+static __inline__ unsigned long __attribute__((__always_inline__, __nodebug__))
+__rorl(unsigned long __x, uint32_t __y) {
+
+  return __ror(__x, __y);
+
+
+
+}
+
+
+
+static __inline__ unsigned int __attribute__((__always_inline__, __nodebug__))
+__clz(uint32_t __t) {
+  return __builtin_arm_clz(__t);
+}
+
+static __inline__ unsigned int __attribute__((__always_inline__, __nodebug__))
+__clzl(unsigned long __t) {
+
+  return __builtin_arm_clz(__t);
+
+
+
+}
+
+static __inline__ unsigned int __attribute__((__always_inline__, __nodebug__))
+__clzll(uint64_t __t) {
+  return __builtin_arm_clz64(__t);
+}
+
+
+static __inline__ unsigned int __attribute__((__always_inline__, __nodebug__))
+__cls(uint32_t __t) {
+  return __builtin_arm_cls(__t);
+}
+
+static __inline__ unsigned int __attribute__((__always_inline__, __nodebug__))
+__clsl(unsigned long __t) {
+
+  return __builtin_arm_cls(__t);
+
+
+
+}
+
+static __inline__ unsigned int __attribute__((__always_inline__, __nodebug__))
+__clsll(uint64_t __t) {
+  return __builtin_arm_cls64(__t);
+}
+
+
+static __inline__ uint32_t __attribute__((__always_inline__, __nodebug__))
+__rev(uint32_t __t) {
+  return __builtin_bswap32(__t);
+}
+
+static __inline__ unsigned long __attribute__((__always_inline__, __nodebug__))
+__revl(unsigned long __t) {
+
+  return __builtin_bswap32(__t);
+
+
+
+}
+
+static __inline__ uint64_t __attribute__((__always_inline__, __nodebug__))
+__revll(uint64_t __t) {
+  return __builtin_bswap64(__t);
+}
+
+
+static __inline__ uint32_t __attribute__((__always_inline__, __nodebug__))
+__rev16(uint32_t __t) {
+  return __ror(__rev(__t), 16);
+}
+
+static __inline__ uint64_t __attribute__((__always_inline__, __nodebug__))
+__rev16ll(uint64_t __t) {
+  return (((uint64_t)__rev16(__t >> 32)) << 32) | (uint64_t)__rev16((uint32_t)__t);
+}
+
+static __inline__ unsigned long __attribute__((__always_inline__, __nodebug__))
+__rev16l(unsigned long __t) {
+
+    return __rev16(__t);
+
+
+
+}
+
+
+static __inline__ int16_t __attribute__((__always_inline__, __nodebug__))
+__revsh(int16_t __t) {
+  return (int16_t)__builtin_bswap16((uint16_t)__t);
+}
+
+
+static __inline__ uint32_t __attribute__((__always_inline__, __nodebug__))
+__rbit(uint32_t __t) {
+  return __builtin_arm_rbit(__t);
+}
+
+static __inline__ uint64_t __attribute__((__always_inline__, __nodebug__))
+__rbitll(uint64_t __t) {
+
+  return (((uint64_t)__builtin_arm_rbit(__t)) << 32) |
+         __builtin_arm_rbit(__t >> 32);
+
+
+
+}
+
+static __inline__ unsigned long __attribute__((__always_inline__, __nodebug__))
+__rbitl(unsigned long __t) {
+
+  return __rbit(__t);
+
+
+
+}
+# 32 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_armclang.h" 2 3
+# 71 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_armclang.h" 3
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpacked"
+  struct __attribute__((packed, aligned(1))) T_UINT16_WRITE { uint16_t v; };
+#pragma clang diagnostic pop
+
+
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpacked"
+  struct __attribute__((packed, aligned(1))) T_UINT16_READ { uint16_t v; };
+#pragma clang diagnostic pop
+
+
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpacked"
+  struct __attribute__((packed, aligned(1))) T_UINT32_WRITE { uint32_t v; };
+#pragma clang diagnostic pop
+
+
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpacked"
+  struct __attribute__((packed, aligned(1))) T_UINT32_READ { uint32_t v; };
+#pragma clang diagnostic pop
+# 408 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_armclang.h" 3
+__attribute__((always_inline)) static inline uint32_t __RRX(uint32_t value)
+{
+  uint32_t result;
+
+  __asm volatile ("rrx %0, %1" : "=r" (result) : "r" (value));
+  return (result);
+}
+# 423 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_armclang.h" 3
+__attribute__((always_inline)) static inline uint8_t __LDRBT(volatile uint8_t *ptr)
+{
+  uint32_t result;
+
+  __asm volatile ("ldrbt %0, %1" : "=r" (result) : "Q" (*ptr) );
+  return ((uint8_t)result);
+}
+# 438 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_armclang.h" 3
+__attribute__((always_inline)) static inline uint16_t __LDRHT(volatile uint16_t *ptr)
+{
+  uint32_t result;
+
+  __asm volatile ("ldrht %0, %1" : "=r" (result) : "Q" (*ptr) );
+  return ((uint16_t)result);
+}
+# 453 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_armclang.h" 3
+__attribute__((always_inline)) static inline uint32_t __LDRT(volatile uint32_t *ptr)
+{
+  uint32_t result;
+
+  __asm volatile ("ldrt %0, %1" : "=r" (result) : "Q" (*ptr) );
+  return (result);
+}
+# 621 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_armclang.h" 3
+__attribute__((always_inline)) static inline void __enable_irq(void)
+{
+  __asm volatile ("cpsie i" : : : "memory");
+}
+# 634 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_armclang.h" 3
+__attribute__((always_inline)) static inline void __disable_irq(void)
+{
+  __asm volatile ("cpsid i" : : : "memory");
+}
+# 646 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_armclang.h" 3
+__attribute__((always_inline)) static inline void __enable_fault_irq(void)
+{
+  __asm volatile ("cpsie f" : : : "memory");
+}
+
+
+
+
+
+
+
+__attribute__((always_inline)) static inline void __disable_fault_irq(void)
+{
+  __asm volatile ("cpsid f" : : : "memory");
+}
+# 670 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_armclang.h" 3
+__attribute__((always_inline)) static inline uint32_t __get_FPSCR(void)
+{
+
+
+
+  return (0U);
+
+}
+
+
+
+
+
+
+
+__attribute__((always_inline)) static inline void __set_FPSCR(uint32_t fpscr)
+{
+
+
+
+  (void)fpscr;
+
+}
+# 702 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_armclang.h" 3
+# 1 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\./m-profile/cmsis_armclang_m.h" 1 3
+# 27 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\./m-profile/cmsis_armclang_m.h" 3
+# 85 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\./m-profile/cmsis_armclang_m.h" 3
+__attribute__((always_inline)) static inline void __STRBT(uint8_t value, volatile uint8_t *ptr)
+{
+  __asm volatile ("strbt %1, %0" : "=Q" (*ptr) : "r" ((uint32_t)value) );
+}
+# 97 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\./m-profile/cmsis_armclang_m.h" 3
+__attribute__((always_inline)) static inline void __STRHT(uint16_t value, volatile uint16_t *ptr)
+{
+  __asm volatile ("strht %1, %0" : "=Q" (*ptr) : "r" ((uint32_t)value) );
+}
+# 109 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\./m-profile/cmsis_armclang_m.h" 3
+__attribute__((always_inline)) static inline void __STRT(uint32_t value, volatile uint32_t *ptr)
+{
+  __asm volatile ("strt %1, %0" : "=Q" (*ptr) : "r" (value) );
+}
+# 128 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\./m-profile/cmsis_armclang_m.h" 3
+__attribute__((always_inline)) static inline uint32_t __get_CONTROL(void)
+{
+  uint32_t result;
+
+  __asm volatile ("MRS %0, control" : "=r" (result) );
+  return (result);
+}
+# 158 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\./m-profile/cmsis_armclang_m.h" 3
+__attribute__((always_inline)) static inline void __set_CONTROL(uint32_t control)
+{
+  __asm volatile ("MSR control, %0" : : "r" (control) : "memory");
+  __builtin_arm_isb(0xF);
+}
+# 184 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\./m-profile/cmsis_armclang_m.h" 3
+__attribute__((always_inline)) static inline uint32_t __get_IPSR(void)
+{
+  uint32_t result;
+
+  __asm volatile ("MRS %0, ipsr" : "=r" (result) );
+  return (result);
+}
+
+
+
+
+
+
+
+__attribute__((always_inline)) static inline uint32_t __get_APSR(void)
+{
+  uint32_t result;
+
+  __asm volatile ("MRS %0, apsr" : "=r" (result) );
+  return (result);
+}
+
+
+
+
+
+
+
+__attribute__((always_inline)) static inline uint32_t __get_xPSR(void)
+{
+  uint32_t result;
+
+  __asm volatile ("MRS %0, xpsr" : "=r" (result) );
+  return (result);
+}
+
+
+
+
+
+
+
+__attribute__((always_inline)) static inline uint32_t __get_PSP(void)
+{
+  uint32_t result;
+
+  __asm volatile ("MRS %0, psp" : "=r" (result) );
+  return (result);
+}
+# 256 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\./m-profile/cmsis_armclang_m.h" 3
+__attribute__((always_inline)) static inline void __set_PSP(uint32_t topOfProcStack)
+{
+  __asm volatile ("MSR psp, %0" : : "r" (topOfProcStack) : );
+}
+# 280 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\./m-profile/cmsis_armclang_m.h" 3
+__attribute__((always_inline)) static inline uint32_t __get_MSP(void)
+{
+  uint32_t result;
+
+  __asm volatile ("MRS %0, msp" : "=r" (result) );
+  return (result);
+}
+# 310 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\./m-profile/cmsis_armclang_m.h" 3
+__attribute__((always_inline)) static inline void __set_MSP(uint32_t topOfMainStack)
+{
+  __asm volatile ("MSR msp, %0" : : "r" (topOfMainStack) : );
+}
+# 361 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\./m-profile/cmsis_armclang_m.h" 3
+__attribute__((always_inline)) static inline uint32_t __get_PRIMASK(void)
+{
+  uint32_t result;
+
+  __asm volatile ("MRS %0, primask" : "=r" (result) );
+  return (result);
+}
+# 391 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\./m-profile/cmsis_armclang_m.h" 3
+__attribute__((always_inline)) static inline void __set_PRIMASK(uint32_t priMask)
+{
+  __asm volatile ("MSR primask, %0" : : "r" (priMask) : "memory");
+}
+# 416 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\./m-profile/cmsis_armclang_m.h" 3
+__attribute__((always_inline)) static inline uint32_t __get_BASEPRI(void)
+{
+  uint32_t result;
+
+  __asm volatile ("MRS %0, basepri" : "=r" (result) );
+  return (result);
+}
+# 446 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\./m-profile/cmsis_armclang_m.h" 3
+__attribute__((always_inline)) static inline void __set_BASEPRI(uint32_t basePri)
+{
+  __asm volatile ("MSR basepri, %0" : : "r" (basePri) : "memory");
+}
+# 471 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\./m-profile/cmsis_armclang_m.h" 3
+__attribute__((always_inline)) static inline void __set_BASEPRI_MAX(uint32_t basePri)
+{
+  __asm volatile ("MSR basepri_max, %0" : : "r" (basePri) : "memory");
+}
+
+
+
+
+
+
+
+__attribute__((always_inline)) static inline uint32_t __get_FAULTMASK(void)
+{
+  uint32_t result;
+
+  __asm volatile ("MRS %0, faultmask" : "=r" (result) );
+  return (result);
+}
+# 512 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\./m-profile/cmsis_armclang_m.h" 3
+__attribute__((always_inline)) static inline void __set_FAULTMASK(uint32_t faultMask)
+{
+  __asm volatile ("MSR faultmask, %0" : : "r" (faultMask) : "memory");
+}
+# 703 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_armclang.h" 2 3
+# 33 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\cmsis_compiler.h" 2 3
+# 117 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 2 3
+# 212 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+typedef union
+{
+  struct
+  {
+    uint32_t _reserved0:27;
+    uint32_t Q:1;
+    uint32_t V:1;
+    uint32_t C:1;
+    uint32_t Z:1;
+    uint32_t N:1;
+  } b;
+  uint32_t w;
+} APSR_Type;
+# 246 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+typedef union
+{
+  struct
+  {
+    uint32_t ISR:9;
+    uint32_t _reserved0:23;
+  } b;
+  uint32_t w;
+} IPSR_Type;
+# 264 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+typedef union
+{
+  struct
+  {
+    uint32_t ISR:9;
+    uint32_t _reserved0:1;
+    uint32_t ICI_IT_1:6;
+    uint32_t _reserved1:8;
+    uint32_t T:1;
+    uint32_t ICI_IT_2:2;
+    uint32_t Q:1;
+    uint32_t V:1;
+    uint32_t C:1;
+    uint32_t Z:1;
+    uint32_t N:1;
+  } b;
+  uint32_t w;
+} xPSR_Type;
+# 315 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+typedef union
+{
+  struct
+  {
+    uint32_t nPRIV:1;
+    uint32_t SPSEL:1;
+    uint32_t _reserved1:30;
+  } b;
+  uint32_t w;
+} CONTROL_Type;
+# 346 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+typedef struct
+{
+  volatile uint32_t ISER[8U];
+        uint32_t RESERVED0[24U];
+  volatile uint32_t ICER[8U];
+        uint32_t RESERVED1[24U];
+  volatile uint32_t ISPR[8U];
+        uint32_t RESERVED2[24U];
+  volatile uint32_t ICPR[8U];
+        uint32_t RESERVED3[24U];
+  volatile uint32_t IABR[8U];
+        uint32_t RESERVED4[56U];
+  volatile uint8_t IPR[240U];
+        uint32_t RESERVED5[644U];
+  volatile uint32_t STIR;
+} NVIC_Type;
+# 380 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+typedef struct
+{
+  volatile const uint32_t CPUID;
+  volatile uint32_t ICSR;
+  volatile uint32_t VTOR;
+  volatile uint32_t AIRCR;
+  volatile uint32_t SCR;
+  volatile uint32_t CCR;
+  volatile uint8_t SHPR[12U];
+  volatile uint32_t SHCSR;
+  volatile uint32_t CFSR;
+  volatile uint32_t HFSR;
+  volatile uint32_t DFSR;
+  volatile uint32_t MMFAR;
+  volatile uint32_t BFAR;
+  volatile uint32_t AFSR;
+  volatile const uint32_t ID_PFR[2U];
+  volatile const uint32_t ID_DFR;
+  volatile const uint32_t ID_AFR;
+  volatile const uint32_t ID_MMFR[4U];
+  volatile const uint32_t ID_ISAR[5U];
+        uint32_t RESERVED0[5U];
+  volatile uint32_t CPACR;
+        uint32_t RESERVED3[93U];
+  volatile uint32_t STIR;
+} SCB_Type;
+# 663 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+typedef struct
+{
+        uint32_t RESERVED0[1U];
+  volatile const uint32_t ICTR;
+
+
+
+        uint32_t RESERVED1[1U];
+
+} SCnSCB_Type;
+# 709 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+typedef struct
+{
+  volatile uint32_t CTRL;
+  volatile uint32_t LOAD;
+  volatile uint32_t VAL;
+  volatile const uint32_t CALIB;
+} SysTick_Type;
+# 761 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+typedef struct
+{
+  volatile union
+  {
+    volatile uint8_t u8;
+    volatile uint16_t u16;
+    volatile uint32_t u32;
+  } PORT [32U];
+        uint32_t RESERVED0[864U];
+  volatile uint32_t TER;
+        uint32_t RESERVED1[15U];
+  volatile uint32_t TPR;
+        uint32_t RESERVED2[15U];
+  volatile uint32_t TCR;
+        uint32_t RESERVED3[32U];
+        uint32_t RESERVED4[43U];
+  volatile uint32_t LAR;
+  volatile const uint32_t LSR;
+} ITM_Type;
+# 836 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+typedef struct
+{
+  volatile uint32_t CTRL;
+  volatile uint32_t CYCCNT;
+  volatile uint32_t CPICNT;
+  volatile uint32_t EXCCNT;
+  volatile uint32_t SLEEPCNT;
+  volatile uint32_t LSUCNT;
+  volatile uint32_t FOLDCNT;
+  volatile const uint32_t PCSR;
+  volatile uint32_t COMP0;
+  volatile uint32_t MASK0;
+  volatile uint32_t FUNCTION0;
+        uint32_t RESERVED0[1U];
+  volatile uint32_t COMP1;
+  volatile uint32_t MASK1;
+  volatile uint32_t FUNCTION1;
+        uint32_t RESERVED1[1U];
+  volatile uint32_t COMP2;
+  volatile uint32_t MASK2;
+  volatile uint32_t FUNCTION2;
+        uint32_t RESERVED2[1U];
+  volatile uint32_t COMP3;
+  volatile uint32_t MASK3;
+  volatile uint32_t FUNCTION3;
+} DWT_Type;
+# 983 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+typedef struct
+{
+  volatile const uint32_t SSPSR;
+  volatile uint32_t CSPSR;
+        uint32_t RESERVED0[2U];
+  volatile uint32_t ACPR;
+        uint32_t RESERVED1[55U];
+  volatile uint32_t SPPR;
+        uint32_t RESERVED2[131U];
+  volatile const uint32_t FFSR;
+  volatile uint32_t FFCR;
+  volatile const uint32_t FSCR;
+        uint32_t RESERVED3[759U];
+  volatile const uint32_t TRIGGER;
+  volatile const uint32_t FIFO0;
+  volatile const uint32_t ITATBCTR2;
+        uint32_t RESERVED4[1U];
+  volatile const uint32_t ITATBCTR0;
+  volatile const uint32_t FIFO1;
+  volatile uint32_t ITCTRL;
+        uint32_t RESERVED5[39U];
+  volatile uint32_t CLAIMSET;
+  volatile uint32_t CLAIMCLR;
+        uint32_t RESERVED7[8U];
+  volatile const uint32_t DEVID;
+  volatile const uint32_t DEVTYPE;
+} TPIU_Type;
+# 1145 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+typedef struct
+{
+  volatile const uint32_t TYPE;
+  volatile uint32_t CTRL;
+  volatile uint32_t RNR;
+  volatile uint32_t RBAR;
+  volatile uint32_t RASR;
+  volatile uint32_t RBAR_A1;
+  volatile uint32_t RASR_A1;
+  volatile uint32_t RBAR_A2;
+  volatile uint32_t RASR_A2;
+  volatile uint32_t RBAR_A3;
+  volatile uint32_t RASR_A3;
+} MPU_Type;
+# 1241 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+typedef struct
+{
+  volatile uint32_t DHCSR;
+  volatile uint32_t DCRSR;
+  volatile uint32_t DCRDR;
+  volatile uint32_t DEMCR;
+} DCB_Type;
+# 1412 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+typedef struct
+{
+  volatile uint32_t DHCSR;
+  volatile uint32_t DCRSR;
+  volatile uint32_t DCRDR;
+  volatile uint32_t DEMCR;
+} CoreDebug_Type;
+# 1581 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline void __NVIC_SetPriorityGrouping(uint32_t PriorityGroup)
+{
+  uint32_t reg_value;
+  uint32_t PriorityGroupTmp = (PriorityGroup & (uint32_t)0x07UL);
+
+  reg_value = ((SCB_Type *) ((0xE000E000UL) + 0x0D00UL) )->AIRCR;
+  reg_value &= ~((uint32_t)((0xFFFFUL << 16U) | (7UL << 8U)));
+  reg_value = (reg_value |
+                ((uint32_t)0x5FAUL << 16U) |
+                (PriorityGroupTmp << 8U) );
+  ((SCB_Type *) ((0xE000E000UL) + 0x0D00UL) )->AIRCR = reg_value;
+}
+
+
+
+
+
+
+
+static inline uint32_t __NVIC_GetPriorityGrouping(void)
+{
+  return ((uint32_t)((((SCB_Type *) ((0xE000E000UL) + 0x0D00UL) )->AIRCR & (7UL << 8U)) >> 8U));
+}
+# 1612 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline void __NVIC_EnableIRQ(IRQn_Type IRQn)
+{
+  if ((int32_t)(IRQn) >= 0)
+  {
+    __asm volatile("":::"memory");
+    ((NVIC_Type *) ((0xE000E000UL) + 0x0100UL) )->ISER[(((uint32_t)IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+    __asm volatile("":::"memory");
+  }
+}
+# 1631 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline uint32_t __NVIC_GetEnableIRQ(IRQn_Type IRQn)
+{
+  if ((int32_t)(IRQn) >= 0)
+  {
+    return((uint32_t)(((((NVIC_Type *) ((0xE000E000UL) + 0x0100UL) )->ISER[(((uint32_t)IRQn) >> 5UL)] & (1UL << (((uint32_t)IRQn) & 0x1FUL))) != 0UL) ? 1UL : 0UL));
+  }
+  else
+  {
+    return(0U);
+  }
+}
+# 1650 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline void __NVIC_DisableIRQ(IRQn_Type IRQn)
+{
+  if ((int32_t)(IRQn) >= 0)
+  {
+    ((NVIC_Type *) ((0xE000E000UL) + 0x0100UL) )->ICER[(((uint32_t)IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+    __builtin_arm_dsb(0xF);
+    __builtin_arm_isb(0xF);
+  }
+}
+# 1669 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline uint32_t __NVIC_GetPendingIRQ(IRQn_Type IRQn)
+{
+  if ((int32_t)(IRQn) >= 0)
+  {
+    return((uint32_t)(((((NVIC_Type *) ((0xE000E000UL) + 0x0100UL) )->ISPR[(((uint32_t)IRQn) >> 5UL)] & (1UL << (((uint32_t)IRQn) & 0x1FUL))) != 0UL) ? 1UL : 0UL));
+  }
+  else
+  {
+    return(0U);
+  }
+}
+# 1688 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline void __NVIC_SetPendingIRQ(IRQn_Type IRQn)
+{
+  if ((int32_t)(IRQn) >= 0)
+  {
+    ((NVIC_Type *) ((0xE000E000UL) + 0x0100UL) )->ISPR[(((uint32_t)IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+  }
+}
+# 1703 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline void __NVIC_ClearPendingIRQ(IRQn_Type IRQn)
+{
+  if ((int32_t)(IRQn) >= 0)
+  {
+    ((NVIC_Type *) ((0xE000E000UL) + 0x0100UL) )->ICPR[(((uint32_t)IRQn) >> 5UL)] = (uint32_t)(1UL << (((uint32_t)IRQn) & 0x1FUL));
+  }
+}
+# 1720 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline uint32_t __NVIC_GetActive(IRQn_Type IRQn)
+{
+  if ((int32_t)(IRQn) >= 0)
+  {
+    return((uint32_t)(((((NVIC_Type *) ((0xE000E000UL) + 0x0100UL) )->IABR[(((uint32_t)IRQn) >> 5UL)] & (1UL << (((uint32_t)IRQn) & 0x1FUL))) != 0UL) ? 1UL : 0UL));
+  }
+  else
+  {
+    return(0U);
+  }
+}
+# 1742 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline void __NVIC_SetPriority(IRQn_Type IRQn, uint32_t priority)
+{
+  if ((int32_t)(IRQn) >= 0)
+  {
+    ((NVIC_Type *) ((0xE000E000UL) + 0x0100UL) )->IPR[((uint32_t)IRQn)] = (uint8_t)((priority << (8U - 5)) & (uint32_t)0xFFUL);
+  }
+  else
+  {
+    ((SCB_Type *) ((0xE000E000UL) + 0x0D00UL) )->SHPR[(((uint32_t)IRQn) & 0xFUL)-4UL] = (uint8_t)((priority << (8U - 5)) & (uint32_t)0xFFUL);
+  }
+}
+# 1764 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline uint32_t __NVIC_GetPriority(IRQn_Type IRQn)
+{
+
+  if ((int32_t)(IRQn) >= 0)
+  {
+    return(((uint32_t)((NVIC_Type *) ((0xE000E000UL) + 0x0100UL) )->IPR[((uint32_t)IRQn)] >> (8U - 5)));
+  }
+  else
+  {
+    return(((uint32_t)((SCB_Type *) ((0xE000E000UL) + 0x0D00UL) )->SHPR[(((uint32_t)IRQn) & 0xFUL)-4UL] >> (8U - 5)));
+  }
+}
+# 1789 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline uint32_t NVIC_EncodePriority (uint32_t PriorityGroup, uint32_t PreemptPriority, uint32_t SubPriority)
+{
+  uint32_t PriorityGroupTmp = (PriorityGroup & (uint32_t)0x07UL);
+  uint32_t PreemptPriorityBits;
+  uint32_t SubPriorityBits;
+
+  PreemptPriorityBits = ((7UL - PriorityGroupTmp) > (uint32_t)(5)) ? (uint32_t)(5) : (uint32_t)(7UL - PriorityGroupTmp);
+  SubPriorityBits = ((PriorityGroupTmp + (uint32_t)(5)) < (uint32_t)7UL) ? (uint32_t)0UL : (uint32_t)((PriorityGroupTmp - 7UL) + (uint32_t)(5));
+
+  return (
+           ((PreemptPriority & (uint32_t)((1UL << (PreemptPriorityBits)) - 1UL)) << SubPriorityBits) |
+           ((SubPriority & (uint32_t)((1UL << (SubPriorityBits )) - 1UL)))
+         );
+}
+# 1816 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline void NVIC_DecodePriority (uint32_t Priority, uint32_t PriorityGroup, uint32_t* const pPreemptPriority, uint32_t* const pSubPriority)
+{
+  uint32_t PriorityGroupTmp = (PriorityGroup & (uint32_t)0x07UL);
+  uint32_t PreemptPriorityBits;
+  uint32_t SubPriorityBits;
+
+  PreemptPriorityBits = ((7UL - PriorityGroupTmp) > (uint32_t)(5)) ? (uint32_t)(5) : (uint32_t)(7UL - PriorityGroupTmp);
+  SubPriorityBits = ((PriorityGroupTmp + (uint32_t)(5)) < (uint32_t)7UL) ? (uint32_t)0UL : (uint32_t)((PriorityGroupTmp - 7UL) + (uint32_t)(5));
+
+  *pPreemptPriority = (Priority >> SubPriorityBits) & (uint32_t)((1UL << (PreemptPriorityBits)) - 1UL);
+  *pSubPriority = (Priority ) & (uint32_t)((1UL << (SubPriorityBits )) - 1UL);
+}
+# 1839 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline void __NVIC_SetVector(IRQn_Type IRQn, uint32_t vector)
+{
+  uint32_t *vectors = (uint32_t *) ((uintptr_t) ((SCB_Type *) ((0xE000E000UL) + 0x0D00UL) )->VTOR);
+  vectors[(int32_t)IRQn + 16] = vector;
+
+}
+# 1855 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline uint32_t __NVIC_GetVector(IRQn_Type IRQn)
+{
+  uint32_t *vectors = (uint32_t *) ((uintptr_t) ((SCB_Type *) ((0xE000E000UL) + 0x0D00UL) )->VTOR);
+  return vectors[(int32_t)IRQn + 16];
+}
+
+
+
+
+
+
+__attribute__((__noreturn__)) static inline void __NVIC_SystemReset(void)
+{
+  __builtin_arm_dsb(0xF);
+
+  ((SCB_Type *) ((0xE000E000UL) + 0x0D00UL) )->AIRCR = (uint32_t)((0x5FAUL << 16U) |
+                           (((SCB_Type *) ((0xE000E000UL) + 0x0D00UL) )->AIRCR & (7UL << 8U)) |
+                            (1UL << 2U) );
+  __builtin_arm_dsb(0xF);
+
+  for(;;)
+  {
+    __nop();
+  }
+}
+# 1888 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+# 1 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\m-profile/armv7m_mpu.h" 1 3
+# 30 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\m-profile/armv7m_mpu.h" 3
+# 181 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\m-profile/armv7m_mpu.h" 3
+typedef struct {
+  uint32_t RBAR;
+  uint32_t RASR;
+} ARM_MPU_Region_t;
+
+
+
+
+static inline void ARM_MPU_Enable(uint32_t MPU_Control)
+{
+  __builtin_arm_dmb(0xF);
+  ((MPU_Type *) ((0xE000E000UL) + 0x0D90UL) )->CTRL = MPU_Control | (1UL );
+
+  ((SCB_Type *) ((0xE000E000UL) + 0x0D00UL) )->SHCSR |= (1UL << 16U);
+
+  __builtin_arm_dsb(0xF);
+  __builtin_arm_isb(0xF);
+}
+
+
+
+static inline void ARM_MPU_Disable(void)
+{
+  __builtin_arm_dmb(0xF);
+
+  ((SCB_Type *) ((0xE000E000UL) + 0x0D00UL) )->SHCSR &= ~(1UL << 16U);
+
+  ((MPU_Type *) ((0xE000E000UL) + 0x0D90UL) )->CTRL &= ~(1UL );
+  __builtin_arm_dsb(0xF);
+  __builtin_arm_isb(0xF);
+}
+
+
+
+
+static inline void ARM_MPU_ClrRegion(uint32_t rnr)
+{
+  ((MPU_Type *) ((0xE000E000UL) + 0x0D90UL) )->RNR = rnr;
+  ((MPU_Type *) ((0xE000E000UL) + 0x0D90UL) )->RASR = 0U;
+}
+
+
+
+
+
+static inline void ARM_MPU_SetRegion(uint32_t rbar, uint32_t rasr)
+{
+  ((MPU_Type *) ((0xE000E000UL) + 0x0D90UL) )->RBAR = rbar;
+  ((MPU_Type *) ((0xE000E000UL) + 0x0D90UL) )->RASR = rasr;
+}
+
+
+
+
+
+
+static inline void ARM_MPU_SetRegionEx(uint32_t rnr, uint32_t rbar, uint32_t rasr)
+{
+  ((MPU_Type *) ((0xE000E000UL) + 0x0D90UL) )->RNR = rnr;
+  ((MPU_Type *) ((0xE000E000UL) + 0x0D90UL) )->RBAR = rbar;
+  ((MPU_Type *) ((0xE000E000UL) + 0x0D90UL) )->RASR = rasr;
+}
+
+
+
+
+
+
+static inline void ARM_MPU_OrderedMemcpy(volatile uint32_t* dst, const uint32_t* __restrict src, uint32_t len)
+{
+  uint32_t i;
+  for (i = 0U; i < len; ++i)
+  {
+    dst[i] = src[i];
+  }
+}
+
+
+
+
+
+static inline void ARM_MPU_Load(ARM_MPU_Region_t const* table, uint32_t cnt)
+{
+  const uint32_t rowWordSize = sizeof(ARM_MPU_Region_t)/4U;
+  while (cnt > 4U) {
+    ARM_MPU_OrderedMemcpy(&(((MPU_Type *) ((0xE000E000UL) + 0x0D90UL) )->RBAR), &(table->RBAR), 4U*rowWordSize);
+    table += 4U;
+    cnt -= 4U;
+  }
+  ARM_MPU_OrderedMemcpy(&(((MPU_Type *) ((0xE000E000UL) + 0x0D90UL) )->RBAR), &(table->RBAR), cnt*rowWordSize);
+}
+# 1889 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 2 3
+# 1909 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline uint32_t SCB_GetFPUType(void)
+{
+    return 0U;
+}
+# 1938 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline uint32_t SysTick_Config(uint32_t ticks)
+{
+  if ((ticks - 1UL) > (0xFFFFFFUL ))
+  {
+    return (1UL);
+  }
+
+  ((SysTick_Type *) ((0xE000E000UL) + 0x0010UL) )->LOAD = (uint32_t)(ticks - 1UL);
+  __NVIC_SetPriority (SysTick_IRQn, (1UL << 5) - 1UL);
+  ((SysTick_Type *) ((0xE000E000UL) + 0x0010UL) )->VAL = 0UL;
+  ((SysTick_Type *) ((0xE000E000UL) + 0x0010UL) )->CTRL = (1UL << 2U) |
+                   (1UL << 1U) |
+                   (1UL );
+  return (0UL);
+}
+# 1968 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+extern volatile int32_t ITM_RxBuffer;
+# 1980 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline uint32_t ITM_SendChar (uint32_t ch)
+{
+  if (((((ITM_Type *) (0xE0000000UL) )->TCR & (1UL )) != 0UL) &&
+      ((((ITM_Type *) (0xE0000000UL) )->TER & 1UL ) != 0UL) )
+  {
+    while (((ITM_Type *) (0xE0000000UL) )->PORT[0U].u32 == 0UL)
+    {
+      __nop();
+    }
+    ((ITM_Type *) (0xE0000000UL) )->PORT[0U].u8 = (uint8_t)ch;
+  }
+  return (ch);
+}
+# 2001 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline int32_t ITM_ReceiveChar (void)
+{
+  int32_t ch = -1;
+
+  if (ITM_RxBuffer != ((int32_t)0x5AA55AA5U))
+  {
+    ch = ITM_RxBuffer;
+    ITM_RxBuffer = ((int32_t)0x5AA55AA5U);
+  }
+
+  return (ch);
+}
+# 2021 "C:/Keil_v5/ARM/PACK/ARM/CMSIS/6.1.0/CMSIS/Core/Include\\core_cm3.h" 3
+static inline int32_t ITM_CheckChar (void)
+{
+
+  if (ITM_RxBuffer == ((int32_t)0x5AA55AA5U))
+  {
+    return (0);
+  }
+  else
+  {
+    return (1);
+  }
+}
+# 107 "C:/Keil_v5/ARM/PACK/Keil/LPC1700_DFP/2.7.1/Device/Include\\LPC17xx.h" 2
+# 1 "C:/Keil_v5/ARM/PACK/Keil/LPC1700_DFP/2.7.1/Device/Include\\system_LPC17xx.h" 1
+# 49 "C:/Keil_v5/ARM/PACK/Keil/LPC1700_DFP/2.7.1/Device/Include\\system_LPC17xx.h"
+extern uint32_t SystemCoreClock;
+
+
+
+
+
+
+extern void SystemInit (void);
+
+
+
+
+
+
+
+extern void SystemCoreClockUpdate (void);
+# 108 "C:/Keil_v5/ARM/PACK/Keil/LPC1700_DFP/2.7.1/Device/Include\\LPC17xx.h" 2
+# 120 "C:/Keil_v5/ARM/PACK/Keil/LPC1700_DFP/2.7.1/Device/Include\\LPC17xx.h"
+typedef struct
+{
+  volatile uint32_t FLASHCFG;
+       uint32_t RESERVED0[31];
+  volatile uint32_t PLL0CON;
+  volatile uint32_t PLL0CFG;
+  volatile const uint32_t PLL0STAT;
+  volatile uint32_t PLL0FEED;
+       uint32_t RESERVED1[4];
+  volatile uint32_t PLL1CON;
+  volatile uint32_t PLL1CFG;
+  volatile const uint32_t PLL1STAT;
+  volatile uint32_t PLL1FEED;
+       uint32_t RESERVED2[4];
+  volatile uint32_t PCON;
+  volatile uint32_t PCONP;
+       uint32_t RESERVED3[15];
+  volatile uint32_t CCLKCFG;
+  volatile uint32_t USBCLKCFG;
+  volatile uint32_t CLKSRCSEL;
+  volatile uint32_t CANSLEEPCLR;
+  volatile uint32_t CANWAKEFLAGS;
+       uint32_t RESERVED4[10];
+  volatile uint32_t EXTINT;
+       uint32_t RESERVED5;
+  volatile uint32_t EXTMODE;
+  volatile uint32_t EXTPOLAR;
+       uint32_t RESERVED6[12];
+  volatile uint32_t RSID;
+       uint32_t RESERVED7[7];
+  volatile uint32_t SCS;
+  volatile uint32_t IRCTRIM;
+  volatile uint32_t PCLKSEL0;
+  volatile uint32_t PCLKSEL1;
+       uint32_t RESERVED8[4];
+  volatile uint32_t USBIntSt;
+  volatile uint32_t DMAREQSEL;
+  volatile uint32_t CLKOUTCFG;
+ } LPC_SC_TypeDef;
+
+
+
+typedef struct
+{
+  volatile uint32_t PINSEL0;
+  volatile uint32_t PINSEL1;
+  volatile uint32_t PINSEL2;
+  volatile uint32_t PINSEL3;
+  volatile uint32_t PINSEL4;
+  volatile uint32_t PINSEL5;
+  volatile uint32_t PINSEL6;
+  volatile uint32_t PINSEL7;
+  volatile uint32_t PINSEL8;
+  volatile uint32_t PINSEL9;
+  volatile uint32_t PINSEL10;
+       uint32_t RESERVED0[5];
+  volatile uint32_t PINMODE0;
+  volatile uint32_t PINMODE1;
+  volatile uint32_t PINMODE2;
+  volatile uint32_t PINMODE3;
+  volatile uint32_t PINMODE4;
+  volatile uint32_t PINMODE5;
+  volatile uint32_t PINMODE6;
+  volatile uint32_t PINMODE7;
+  volatile uint32_t PINMODE8;
+  volatile uint32_t PINMODE9;
+  volatile uint32_t PINMODE_OD0;
+  volatile uint32_t PINMODE_OD1;
+  volatile uint32_t PINMODE_OD2;
+  volatile uint32_t PINMODE_OD3;
+  volatile uint32_t PINMODE_OD4;
+  volatile uint32_t I2CPADCFG;
+} LPC_PINCON_TypeDef;
+
+
+
+typedef struct
+{
+  union {
+    volatile uint32_t FIODIR;
+    struct {
+      volatile uint16_t FIODIRL;
+      volatile uint16_t FIODIRH;
+    };
+    struct {
+      volatile uint8_t FIODIR0;
+      volatile uint8_t FIODIR1;
+      volatile uint8_t FIODIR2;
+      volatile uint8_t FIODIR3;
+    };
+  };
+  uint32_t RESERVED0[3];
+  union {
+    volatile uint32_t FIOMASK;
+    struct {
+      volatile uint16_t FIOMASKL;
+      volatile uint16_t FIOMASKH;
+    };
+    struct {
+      volatile uint8_t FIOMASK0;
+      volatile uint8_t FIOMASK1;
+      volatile uint8_t FIOMASK2;
+      volatile uint8_t FIOMASK3;
+    };
+  };
+  union {
+    volatile uint32_t FIOPIN;
+    struct {
+      volatile uint16_t FIOPINL;
+      volatile uint16_t FIOPINH;
+    };
+    struct {
+      volatile uint8_t FIOPIN0;
+      volatile uint8_t FIOPIN1;
+      volatile uint8_t FIOPIN2;
+      volatile uint8_t FIOPIN3;
+    };
+  };
+  union {
+    volatile uint32_t FIOSET;
+    struct {
+      volatile uint16_t FIOSETL;
+      volatile uint16_t FIOSETH;
+    };
+    struct {
+      volatile uint8_t FIOSET0;
+      volatile uint8_t FIOSET1;
+      volatile uint8_t FIOSET2;
+      volatile uint8_t FIOSET3;
+    };
+  };
+  union {
+    volatile uint32_t FIOCLR;
+    struct {
+      volatile uint16_t FIOCLRL;
+      volatile uint16_t FIOCLRH;
+    };
+    struct {
+      volatile uint8_t FIOCLR0;
+      volatile uint8_t FIOCLR1;
+      volatile uint8_t FIOCLR2;
+      volatile uint8_t FIOCLR3;
+    };
+  };
+} LPC_GPIO_TypeDef;
+
+
+typedef struct
+{
+  volatile const uint32_t IntStatus;
+  volatile const uint32_t IO0IntStatR;
+  volatile const uint32_t IO0IntStatF;
+  volatile uint32_t IO0IntClr;
+  volatile uint32_t IO0IntEnR;
+  volatile uint32_t IO0IntEnF;
+       uint32_t RESERVED0[3];
+  volatile const uint32_t IO2IntStatR;
+  volatile const uint32_t IO2IntStatF;
+  volatile uint32_t IO2IntClr;
+  volatile uint32_t IO2IntEnR;
+  volatile uint32_t IO2IntEnF;
+} LPC_GPIOINT_TypeDef;
+
+
+
+typedef struct
+{
+  volatile uint32_t IR;
+  volatile uint32_t TCR;
+  volatile uint32_t TC;
+  volatile uint32_t PR;
+  volatile uint32_t PC;
+  volatile uint32_t MCR;
+  volatile uint32_t MR0;
+  volatile uint32_t MR1;
+  volatile uint32_t MR2;
+  volatile uint32_t MR3;
+  volatile uint32_t CCR;
+  volatile const uint32_t CR0;
+  volatile const uint32_t CR1;
+       uint32_t RESERVED0[2];
+  volatile uint32_t EMR;
+       uint32_t RESERVED1[12];
+  volatile uint32_t CTCR;
+} LPC_TIM_TypeDef;
+
+
+
+typedef struct
+{
+  volatile uint32_t IR;
+  volatile uint32_t TCR;
+  volatile uint32_t TC;
+  volatile uint32_t PR;
+  volatile uint32_t PC;
+  volatile uint32_t MCR;
+  volatile uint32_t MR0;
+  volatile uint32_t MR1;
+  volatile uint32_t MR2;
+  volatile uint32_t MR3;
+  volatile uint32_t CCR;
+  volatile const uint32_t CR0;
+  volatile const uint32_t CR1;
+  volatile const uint32_t CR2;
+  volatile const uint32_t CR3;
+       uint32_t RESERVED0;
+  volatile uint32_t MR4;
+  volatile uint32_t MR5;
+  volatile uint32_t MR6;
+  volatile uint32_t PCR;
+  volatile uint32_t LER;
+       uint32_t RESERVED1[7];
+  volatile uint32_t CTCR;
+} LPC_PWM_TypeDef;
+
+
+
+typedef struct
+{
+  union {
+  volatile const uint8_t RBR;
+  volatile uint8_t THR;
+  volatile uint8_t DLL;
+       uint32_t RESERVED0;
+  };
+  union {
+  volatile uint8_t DLM;
+  volatile uint32_t IER;
+  };
+  union {
+  volatile const uint32_t IIR;
+  volatile uint8_t FCR;
+  };
+  volatile uint8_t LCR;
+       uint8_t RESERVED1[7];
+  volatile const uint8_t LSR;
+       uint8_t RESERVED2[7];
+  volatile uint8_t SCR;
+       uint8_t RESERVED3[3];
+  volatile uint32_t ACR;
+  volatile uint8_t ICR;
+       uint8_t RESERVED4[3];
+  volatile uint8_t FDR;
+       uint8_t RESERVED5[7];
+  volatile uint8_t TER;
+       uint8_t RESERVED6[3];
+} LPC_UART_TypeDef;
+
+
+typedef struct
+{
+  union {
+  volatile const uint8_t RBR;
+  volatile uint8_t THR;
+  volatile uint8_t DLL;
+       uint32_t RESERVED0;
+  };
+  union {
+  volatile uint8_t DLM;
+       uint8_t RESERVED1[3];
+  volatile uint32_t IER;
+  };
+  union {
+  volatile const uint32_t IIR;
+  volatile uint8_t FCR;
+  };
+  volatile uint8_t LCR;
+       uint8_t RESERVED2[3];
+  volatile uint8_t MCR;
+       uint8_t RESERVED3[3];
+  volatile const uint8_t LSR;
+       uint8_t RESERVED4[3];
+  volatile const uint8_t MSR;
+       uint8_t RESERVED5[3];
+  volatile uint8_t SCR;
+       uint8_t RESERVED6[3];
+  volatile uint32_t ACR;
+       uint32_t RESERVED7;
+  volatile uint32_t FDR;
+       uint32_t RESERVED8;
+  volatile uint8_t TER;
+       uint8_t RESERVED9[27];
+  volatile uint8_t RS485CTRL;
+       uint8_t RESERVED10[3];
+  volatile uint8_t ADRMATCH;
+       uint8_t RESERVED11[3];
+  volatile uint8_t RS485DLY;
+       uint8_t RESERVED12[3];
+} LPC_UART1_TypeDef;
+
+
+
+typedef struct
+{
+  volatile uint32_t SPCR;
+  volatile const uint32_t SPSR;
+  volatile uint32_t SPDR;
+  volatile uint32_t SPCCR;
+       uint32_t RESERVED0[3];
+  volatile uint32_t SPINT;
+} LPC_SPI_TypeDef;
+
+
+
+typedef struct
+{
+  volatile uint32_t CR0;
+  volatile uint32_t CR1;
+  volatile uint32_t DR;
+  volatile const uint32_t SR;
+  volatile uint32_t CPSR;
+  volatile uint32_t IMSC;
+  volatile uint32_t RIS;
+  volatile uint32_t MIS;
+  volatile uint32_t ICR;
+  volatile uint32_t DMACR;
+} LPC_SSP_TypeDef;
+
+
+
+typedef struct
+{
+  volatile uint32_t I2CONSET;
+  volatile const uint32_t I2STAT;
+  volatile uint32_t I2DAT;
+  volatile uint32_t I2ADR0;
+  volatile uint32_t I2SCLH;
+  volatile uint32_t I2SCLL;
+  volatile uint32_t I2CONCLR;
+  volatile uint32_t MMCTRL;
+  volatile uint32_t I2ADR1;
+  volatile uint32_t I2ADR2;
+  volatile uint32_t I2ADR3;
+  volatile const uint32_t I2DATA_BUFFER;
+  volatile uint32_t I2MASK0;
+  volatile uint32_t I2MASK1;
+  volatile uint32_t I2MASK2;
+  volatile uint32_t I2MASK3;
+} LPC_I2C_TypeDef;
+
+
+
+typedef struct
+{
+  volatile uint32_t I2SDAO;
+  volatile uint32_t I2SDAI;
+  volatile uint32_t I2STXFIFO;
+  volatile const uint32_t I2SRXFIFO;
+  volatile const uint32_t I2SSTATE;
+  volatile uint32_t I2SDMA1;
+  volatile uint32_t I2SDMA2;
+  volatile uint32_t I2SIRQ;
+  volatile uint32_t I2STXRATE;
+  volatile uint32_t I2SRXRATE;
+  volatile uint32_t I2STXBITRATE;
+  volatile uint32_t I2SRXBITRATE;
+  volatile uint32_t I2STXMODE;
+  volatile uint32_t I2SRXMODE;
+} LPC_I2S_TypeDef;
+
+
+
+typedef struct
+{
+  volatile uint32_t RICOMPVAL;
+  volatile uint32_t RIMASK;
+  volatile uint8_t RICTRL;
+       uint8_t RESERVED0[3];
+  volatile uint32_t RICOUNTER;
+} LPC_RIT_TypeDef;
+
+
+
+typedef struct
+{
+  volatile uint8_t ILR;
+       uint8_t RESERVED0[7];
+  volatile uint8_t CCR;
+       uint8_t RESERVED1[3];
+  volatile uint8_t CIIR;
+       uint8_t RESERVED2[3];
+  volatile uint8_t AMR;
+       uint8_t RESERVED3[3];
+  volatile const uint32_t CTIME0;
+  volatile const uint32_t CTIME1;
+  volatile const uint32_t CTIME2;
+  volatile uint8_t SEC;
+       uint8_t RESERVED4[3];
+  volatile uint8_t MIN;
+       uint8_t RESERVED5[3];
+  volatile uint8_t HOUR;
+       uint8_t RESERVED6[3];
+  volatile uint8_t DOM;
+       uint8_t RESERVED7[3];
+  volatile uint8_t DOW;
+       uint8_t RESERVED8[3];
+  volatile uint16_t DOY;
+       uint16_t RESERVED9;
+  volatile uint8_t MONTH;
+       uint8_t RESERVED10[3];
+  volatile uint16_t YEAR;
+       uint16_t RESERVED11;
+  volatile uint32_t CALIBRATION;
+  volatile uint32_t GPREG0;
+  volatile uint32_t GPREG1;
+  volatile uint32_t GPREG2;
+  volatile uint32_t GPREG3;
+  volatile uint32_t GPREG4;
+  volatile uint8_t RTC_AUXEN;
+       uint8_t RESERVED12[3];
+  volatile uint8_t RTC_AUX;
+       uint8_t RESERVED13[3];
+  volatile uint8_t ALSEC;
+       uint8_t RESERVED14[3];
+  volatile uint8_t ALMIN;
+       uint8_t RESERVED15[3];
+  volatile uint8_t ALHOUR;
+       uint8_t RESERVED16[3];
+  volatile uint8_t ALDOM;
+       uint8_t RESERVED17[3];
+  volatile uint8_t ALDOW;
+       uint8_t RESERVED18[3];
+  volatile uint16_t ALDOY;
+       uint16_t RESERVED19;
+  volatile uint8_t ALMON;
+       uint8_t RESERVED20[3];
+  volatile uint16_t ALYEAR;
+       uint16_t RESERVED21;
+} LPC_RTC_TypeDef;
+
+
+
+typedef struct
+{
+  volatile uint8_t WDMOD;
+       uint8_t RESERVED0[3];
+  volatile uint32_t WDTC;
+  volatile uint8_t WDFEED;
+       uint8_t RESERVED1[3];
+  volatile const uint32_t WDTV;
+  volatile uint32_t WDCLKSEL;
+} LPC_WDT_TypeDef;
+
+
+
+typedef struct
+{
+  volatile uint32_t ADCR;
+  volatile uint32_t ADGDR;
+       uint32_t RESERVED0;
+  volatile uint32_t ADINTEN;
+  volatile const uint32_t ADDR0;
+  volatile const uint32_t ADDR1;
+  volatile const uint32_t ADDR2;
+  volatile const uint32_t ADDR3;
+  volatile const uint32_t ADDR4;
+  volatile const uint32_t ADDR5;
+  volatile const uint32_t ADDR6;
+  volatile const uint32_t ADDR7;
+  volatile const uint32_t ADSTAT;
+  volatile uint32_t ADTRM;
+} LPC_ADC_TypeDef;
+
+
+
+typedef struct
+{
+  volatile uint32_t DACR;
+  volatile uint32_t DACCTRL;
+  volatile uint16_t DACCNTVAL;
+       uint16_t RESERVED;
+} LPC_DAC_TypeDef;
+
+
+
+typedef struct
+{
+  volatile const uint32_t MCCON;
+  volatile uint32_t MCCON_SET;
+  volatile uint32_t MCCON_CLR;
+  volatile const uint32_t MCCAPCON;
+  volatile uint32_t MCCAPCON_SET;
+  volatile uint32_t MCCAPCON_CLR;
+  volatile uint32_t MCTIM0;
+  volatile uint32_t MCTIM1;
+  volatile uint32_t MCTIM2;
+  volatile uint32_t MCPER0;
+  volatile uint32_t MCPER1;
+  volatile uint32_t MCPER2;
+  volatile uint32_t MCPW0;
+  volatile uint32_t MCPW1;
+  volatile uint32_t MCPW2;
+  volatile uint32_t MCDEADTIME;
+  volatile uint32_t MCCCP;
+  volatile uint32_t MCCR0;
+  volatile uint32_t MCCR1;
+  volatile uint32_t MCCR2;
+  volatile const uint32_t MCINTEN;
+  volatile uint32_t MCINTEN_SET;
+  volatile uint32_t MCINTEN_CLR;
+  volatile const uint32_t MCCNTCON;
+  volatile uint32_t MCCNTCON_SET;
+  volatile uint32_t MCCNTCON_CLR;
+  volatile const uint32_t MCINTFLAG;
+  volatile uint32_t MCINTFLAG_SET;
+  volatile uint32_t MCINTFLAG_CLR;
+  volatile uint32_t MCCAP_CLR;
+} LPC_MCPWM_TypeDef;
+
+
+
+typedef struct
+{
+  volatile uint32_t QEICON;
+  volatile const uint32_t QEISTAT;
+  volatile uint32_t QEICONF;
+  volatile const uint32_t QEIPOS;
+  volatile uint32_t QEIMAXPOS;
+  volatile uint32_t CMPOS0;
+  volatile uint32_t CMPOS1;
+  volatile uint32_t CMPOS2;
+  volatile const uint32_t INXCNT;
+  volatile uint32_t INXCMP;
+  volatile uint32_t QEILOAD;
+  volatile const uint32_t QEITIME;
+  volatile const uint32_t QEIVEL;
+  volatile const uint32_t QEICAP;
+  volatile uint32_t VELCOMP;
+  volatile uint32_t FILTER;
+       uint32_t RESERVED0[998];
+  volatile uint32_t QEIIEC;
+  volatile uint32_t QEIIES;
+  volatile const uint32_t QEIINTSTAT;
+  volatile const uint32_t QEIIE;
+  volatile uint32_t QEICLR;
+  volatile uint32_t QEISET;
+} LPC_QEI_TypeDef;
+
+
+
+typedef struct
+{
+  volatile uint32_t mask[512];
+} LPC_CANAF_RAM_TypeDef;
+
+
+typedef struct
+{
+  volatile uint32_t AFMR;
+  volatile uint32_t SFF_sa;
+  volatile uint32_t SFF_GRP_sa;
+  volatile uint32_t EFF_sa;
+  volatile uint32_t EFF_GRP_sa;
+  volatile uint32_t ENDofTable;
+  volatile const uint32_t LUTerrAd;
+  volatile const uint32_t LUTerr;
+  volatile uint32_t FCANIE;
+  volatile uint32_t FCANIC0;
+  volatile uint32_t FCANIC1;
+} LPC_CANAF_TypeDef;
+
+
+typedef struct
+{
+  volatile const uint32_t CANTxSR;
+  volatile const uint32_t CANRxSR;
+  volatile const uint32_t CANMSR;
+} LPC_CANCR_TypeDef;
+
+
+typedef struct
+{
+  volatile uint32_t MOD;
+  volatile uint32_t CMR;
+  volatile uint32_t GSR;
+  volatile const uint32_t ICR;
+  volatile uint32_t IER;
+  volatile uint32_t BTR;
+  volatile uint32_t EWL;
+  volatile const uint32_t SR;
+  volatile uint32_t RFS;
+  volatile uint32_t RID;
+  volatile uint32_t RDA;
+  volatile uint32_t RDB;
+  volatile uint32_t TFI1;
+  volatile uint32_t TID1;
+  volatile uint32_t TDA1;
+  volatile uint32_t TDB1;
+  volatile uint32_t TFI2;
+  volatile uint32_t TID2;
+  volatile uint32_t TDA2;
+  volatile uint32_t TDB2;
+  volatile uint32_t TFI3;
+  volatile uint32_t TID3;
+  volatile uint32_t TDA3;
+  volatile uint32_t TDB3;
+} LPC_CAN_TypeDef;
+
+
+
+typedef struct
+{
+  volatile const uint32_t DMACIntStat;
+  volatile const uint32_t DMACIntTCStat;
+  volatile uint32_t DMACIntTCClear;
+  volatile const uint32_t DMACIntErrStat;
+  volatile uint32_t DMACIntErrClr;
+  volatile const uint32_t DMACRawIntTCStat;
+  volatile const uint32_t DMACRawIntErrStat;
+  volatile const uint32_t DMACEnbldChns;
+  volatile uint32_t DMACSoftBReq;
+  volatile uint32_t DMACSoftSReq;
+  volatile uint32_t DMACSoftLBReq;
+  volatile uint32_t DMACSoftLSReq;
+  volatile uint32_t DMACConfig;
+  volatile uint32_t DMACSync;
+} LPC_GPDMA_TypeDef;
+
+
+typedef struct
+{
+  volatile uint32_t DMACCSrcAddr;
+  volatile uint32_t DMACCDestAddr;
+  volatile uint32_t DMACCLLI;
+  volatile uint32_t DMACCControl;
+  volatile uint32_t DMACCConfig;
+} LPC_GPDMACH_TypeDef;
+
+
+
+typedef struct
+{
+  volatile const uint32_t HcRevision;
+  volatile uint32_t HcControl;
+  volatile uint32_t HcCommandStatus;
+  volatile uint32_t HcInterruptStatus;
+  volatile uint32_t HcInterruptEnable;
+  volatile uint32_t HcInterruptDisable;
+  volatile uint32_t HcHCCA;
+  volatile const uint32_t HcPeriodCurrentED;
+  volatile uint32_t HcControlHeadED;
+  volatile uint32_t HcControlCurrentED;
+  volatile uint32_t HcBulkHeadED;
+  volatile uint32_t HcBulkCurrentED;
+  volatile const uint32_t HcDoneHead;
+  volatile uint32_t HcFmInterval;
+  volatile const uint32_t HcFmRemaining;
+  volatile const uint32_t HcFmNumber;
+  volatile uint32_t HcPeriodicStart;
+  volatile uint32_t HcLSTreshold;
+  volatile uint32_t HcRhDescriptorA;
+  volatile uint32_t HcRhDescriptorB;
+  volatile uint32_t HcRhStatus;
+  volatile uint32_t HcRhPortStatus1;
+  volatile uint32_t HcRhPortStatus2;
+       uint32_t RESERVED0[40];
+  volatile const uint32_t Module_ID;
+
+  volatile const uint32_t OTGIntSt;
+  volatile uint32_t OTGIntEn;
+  volatile uint32_t OTGIntSet;
+  volatile uint32_t OTGIntClr;
+  volatile uint32_t OTGStCtrl;
+  volatile uint32_t OTGTmr;
+       uint32_t RESERVED1[58];
+
+  volatile const uint32_t USBDevIntSt;
+  volatile uint32_t USBDevIntEn;
+  volatile uint32_t USBDevIntClr;
+  volatile uint32_t USBDevIntSet;
+
+  volatile uint32_t USBCmdCode;
+  volatile const uint32_t USBCmdData;
+
+  volatile const uint32_t USBRxData;
+  volatile uint32_t USBTxData;
+  volatile const uint32_t USBRxPLen;
+  volatile uint32_t USBTxPLen;
+  volatile uint32_t USBCtrl;
+  volatile uint32_t USBDevIntPri;
+
+  volatile const uint32_t USBEpIntSt;
+  volatile uint32_t USBEpIntEn;
+  volatile uint32_t USBEpIntClr;
+  volatile uint32_t USBEpIntSet;
+  volatile uint32_t USBEpIntPri;
+
+  volatile uint32_t USBReEp;
+  volatile uint32_t USBEpInd;
+  volatile uint32_t USBMaxPSize;
+
+  volatile const uint32_t USBDMARSt;
+  volatile uint32_t USBDMARClr;
+  volatile uint32_t USBDMARSet;
+       uint32_t RESERVED2[9];
+  volatile uint32_t USBUDCAH;
+  volatile const uint32_t USBEpDMASt;
+  volatile uint32_t USBEpDMAEn;
+  volatile uint32_t USBEpDMADis;
+  volatile const uint32_t USBDMAIntSt;
+  volatile uint32_t USBDMAIntEn;
+       uint32_t RESERVED3[2];
+  volatile const uint32_t USBEoTIntSt;
+  volatile uint32_t USBEoTIntClr;
+  volatile uint32_t USBEoTIntSet;
+  volatile const uint32_t USBNDDRIntSt;
+  volatile uint32_t USBNDDRIntClr;
+  volatile uint32_t USBNDDRIntSet;
+  volatile const uint32_t USBSysErrIntSt;
+  volatile uint32_t USBSysErrIntClr;
+  volatile uint32_t USBSysErrIntSet;
+       uint32_t RESERVED4[15];
+
+  union {
+  volatile const uint32_t I2C_RX;
+  volatile uint32_t I2C_TX;
+  };
+  volatile const uint32_t I2C_STS;
+  volatile uint32_t I2C_CTL;
+  volatile uint32_t I2C_CLKHI;
+  volatile uint32_t I2C_CLKLO;
+       uint32_t RESERVED5[824];
+
+  union {
+  volatile uint32_t USBClkCtrl;
+  volatile uint32_t OTGClkCtrl;
+  };
+  union {
+  volatile const uint32_t USBClkSt;
+  volatile const uint32_t OTGClkSt;
+  };
+} LPC_USB_TypeDef;
+
+
+
+typedef struct
+{
+  volatile uint32_t MAC1;
+  volatile uint32_t MAC2;
+  volatile uint32_t IPGT;
+  volatile uint32_t IPGR;
+  volatile uint32_t CLRT;
+  volatile uint32_t MAXF;
+  volatile uint32_t SUPP;
+  volatile uint32_t TEST;
+  volatile uint32_t MCFG;
+  volatile uint32_t MCMD;
+  volatile uint32_t MADR;
+  volatile uint32_t MWTD;
+  volatile const uint32_t MRDD;
+  volatile const uint32_t MIND;
+       uint32_t RESERVED0[2];
+  volatile uint32_t SA0;
+  volatile uint32_t SA1;
+  volatile uint32_t SA2;
+       uint32_t RESERVED1[45];
+  volatile uint32_t Command;
+  volatile const uint32_t Status;
+  volatile uint32_t RxDescriptor;
+  volatile uint32_t RxStatus;
+  volatile uint32_t RxDescriptorNumber;
+  volatile const uint32_t RxProduceIndex;
+  volatile uint32_t RxConsumeIndex;
+  volatile uint32_t TxDescriptor;
+  volatile uint32_t TxStatus;
+  volatile uint32_t TxDescriptorNumber;
+  volatile uint32_t TxProduceIndex;
+  volatile const uint32_t TxConsumeIndex;
+       uint32_t RESERVED2[10];
+  volatile const uint32_t TSV0;
+  volatile const uint32_t TSV1;
+  volatile const uint32_t RSV;
+       uint32_t RESERVED3[3];
+  volatile uint32_t FlowControlCounter;
+  volatile const uint32_t FlowControlStatus;
+       uint32_t RESERVED4[34];
+  volatile uint32_t RxFilterCtrl;
+  volatile uint32_t RxFilterWoLStatus;
+  volatile uint32_t RxFilterWoLClear;
+       uint32_t RESERVED5;
+  volatile uint32_t HashFilterL;
+  volatile uint32_t HashFilterH;
+       uint32_t RESERVED6[882];
+  volatile const uint32_t IntStatus;
+  volatile uint32_t IntEnable;
+  volatile uint32_t IntClear;
+  volatile uint32_t IntSet;
+       uint32_t RESERVED7;
+  volatile uint32_t PowerDown;
+       uint32_t RESERVED8;
+  volatile uint32_t Module_ID;
+} LPC_EMAC_TypeDef;
+# 27 "GLCD\\GLCD.h" 2
+# 90 "GLCD\\GLCD.h"
+void LCD_Initialization(void);
+void LCD_Clear(uint16_t Color);
+uint16_t LCD_GetPoint(uint16_t Xpos,uint16_t Ypos);
+void LCD_SetPoint(uint16_t Xpos,uint16_t Ypos,uint16_t point);
+void LCD_DrawLine( uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1 , uint16_t color );
+void PutChar( uint16_t Xpos, uint16_t Ypos, uint8_t ASCI, uint16_t charColor, uint16_t bkColor );
+void GUI_Text(uint16_t Xpos, uint16_t Ypos, uint8_t *str,uint16_t Color, uint16_t bkColor);
+# 113 "GLCD\\GLCD.h"
+void LCD_draw_hline(uint16_t x, uint16_t y, uint16_t length, uint16_t color);
+
+void LCD_draw_vline(uint16_t x, uint16_t y, uint16_t length, uint16_t color);
+
+
+
+void LCD_draw_rect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
+
+void LCD_fill_rect(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color);
+
+
+
+void LCD_draw_circle(uint16_t xc, uint16_t yc, uint16_t r, uint16_t color);
+
+void LCD_fill_circle(uint16_t xc, uint16_t yc, uint16_t r, uint16_t color);
+
+
+
+void LCD_draw_number(uint16_t x, uint16_t y, int32_t num, uint16_t color, uint16_t bkColor);
+
+void LCD_draw_float(uint16_t x, uint16_t y, float value, uint8_t decimals, uint16_t color, uint16_t bkColor);
+
+void LCD_print_text(uint16_t x, uint16_t y, char *str, uint16_t color, uint16_t bkColor);
+
+void LCD_printf(uint16_t x, uint16_t y, uint16_t color, uint16_t bkColor, const char *fmt, ...);
+# 24 "GLCD/GLCD.c" 2
+# 1 "GLCD\\AsciiLib.h" 1
+# 26 "GLCD\\AsciiLib.h"
+# 1 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 1 3
+# 51 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+    typedef unsigned int size_t;
+
+
+
+
+
+
+extern __attribute__((__nothrow__)) void *memcpy(void * __restrict ,
+                    const void * __restrict , size_t ) __attribute__((__nonnull__(1,2)));
+
+
+
+
+
+
+extern __attribute__((__nothrow__)) void *memmove(void * ,
+                    const void * , size_t ) __attribute__((__nonnull__(1,2)));
+# 77 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+extern __attribute__((__nothrow__)) char *strcpy(char * __restrict , const char * __restrict ) __attribute__((__nonnull__(1,2)));
+
+
+
+
+
+
+extern __attribute__((__nothrow__)) char *strncpy(char * __restrict , const char * __restrict , size_t ) __attribute__((__nonnull__(1,2)));
+# 93 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+extern __attribute__((__nothrow__)) char *strcat(char * __restrict , const char * __restrict ) __attribute__((__nonnull__(1,2)));
+
+
+
+
+
+
+extern __attribute__((__nothrow__)) char *strncat(char * __restrict , const char * __restrict , size_t ) __attribute__((__nonnull__(1,2)));
+# 117 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+extern __attribute__((__nothrow__)) int memcmp(const void * , const void * , size_t ) __attribute__((__nonnull__(1,2)));
+
+
+
+
+
+
+
+extern __attribute__((__nothrow__)) int strcmp(const char * , const char * ) __attribute__((__nonnull__(1,2)));
+
+
+
+
+
+
+extern __attribute__((__nothrow__)) int strncmp(const char * , const char * , size_t ) __attribute__((__nonnull__(1,2)));
+# 141 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+extern __attribute__((__nothrow__)) int strcasecmp(const char * , const char * ) __attribute__((__nonnull__(1,2)));
+
+
+
+
+
+
+
+extern __attribute__((__nothrow__)) int strncasecmp(const char * , const char * , size_t ) __attribute__((__nonnull__(1,2)));
+# 158 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+extern __attribute__((__nothrow__)) int strcoll(const char * , const char * ) __attribute__((__nonnull__(1,2)));
+# 169 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+extern __attribute__((__nothrow__)) size_t strxfrm(char * __restrict , const char * __restrict , size_t ) __attribute__((__nonnull__(2)));
+# 193 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+extern __attribute__((__nothrow__)) void *memchr(const void * , int , size_t ) __attribute__((__nonnull__(1)));
+# 209 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+extern __attribute__((__nothrow__)) char *strchr(const char * , int ) __attribute__((__nonnull__(1)));
+# 218 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+extern __attribute__((__nothrow__)) size_t strcspn(const char * , const char * ) __attribute__((__nonnull__(1,2)));
+# 232 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+extern __attribute__((__nothrow__)) char *strpbrk(const char * , const char * ) __attribute__((__nonnull__(1,2)));
+# 247 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+extern __attribute__((__nothrow__)) char *strrchr(const char * , int ) __attribute__((__nonnull__(1)));
+# 257 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+extern __attribute__((__nothrow__)) size_t strspn(const char * , const char * ) __attribute__((__nonnull__(1,2)));
+# 270 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+extern __attribute__((__nothrow__)) char *strstr(const char * , const char * ) __attribute__((__nonnull__(1,2)));
+# 280 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+extern __attribute__((__nothrow__)) char *strtok(char * __restrict , const char * __restrict ) __attribute__((__nonnull__(2)));
+extern __attribute__((__nothrow__)) char *_strtok_r(char * , const char * , char ** ) __attribute__((__nonnull__(2,3)));
+# 321 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+extern __attribute__((__nothrow__)) void *memset(void * , int , size_t ) __attribute__((__nonnull__(1)));
+
+
+
+
+
+extern __attribute__((__nothrow__)) char *strerror(int );
+
+
+
+
+
+
+
+extern __attribute__((__nothrow__)) size_t strlen(const char * ) __attribute__((__nonnull__(1)));
+
+
+
+
+
+extern __attribute__((__nothrow__)) size_t strnlen(const char * , size_t ) __attribute__((__nonnull__(1)));
+
+
+
+
+
+
+
+extern __attribute__((__nothrow__)) size_t strlcpy(char * , const char * , size_t ) __attribute__((__nonnull__(1,2)));
+# 369 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+extern __attribute__((__nothrow__)) size_t strlcat(char * , const char * , size_t ) __attribute__((__nonnull__(1,2)));
+# 395 "C:\\Keil_v5\\ARM\\ARMCLANG\\bin\\..\\include\\string.h" 3
+extern __attribute__((__nothrow__)) void _membitcpybl(void * , const void * , int , int , size_t ) __attribute__((__nonnull__(1,2)));
+extern __attribute__((__nothrow__)) void _membitcpybb(void * , const void * , int , int , size_t ) __attribute__((__nonnull__(1,2)));
+extern __attribute__((__nothrow__)) void _membitcpyhl(void * , const void * , int , int , size_t ) __attribute__((__nonnull__(1,2)));
+extern __attribute__((__nothrow__)) void _membitcpyhb(void * , const void * , int , int , size_t ) __attribute__((__nonnull__(1,2)));
+extern __attribute__((__nothrow__)) void _membitcpywl(void * , const void * , int , int , size_t ) __attribute__((__nonnull__(1,2)));
+extern __attribute__((__nothrow__)) void _membitcpywb(void * , const void * , int , int , size_t ) __attribute__((__nonnull__(1,2)));
+extern __attribute__((__nothrow__)) void _membitmovebl(void * , const void * , int , int , size_t ) __attribute__((__nonnull__(1,2)));
+extern __attribute__((__nothrow__)) void _membitmovebb(void * , const void * , int , int , size_t ) __attribute__((__nonnull__(1,2)));
+extern __attribute__((__nothrow__)) void _membitmovehl(void * , const void * , int , int , size_t ) __attribute__((__nonnull__(1,2)));
+extern __attribute__((__nothrow__)) void _membitmovehb(void * , const void * , int , int , size_t ) __attribute__((__nonnull__(1,2)));
+extern __attribute__((__nothrow__)) void _membitmovewl(void * , const void * , int , int , size_t ) __attribute__((__nonnull__(1,2)));
+extern __attribute__((__nothrow__)) void _membitmovewb(void * , const void * , int , int , size_t ) __attribute__((__nonnull__(1,2)));
+# 27 "GLCD\\AsciiLib.h" 2
+
+
+
+
+
+
+void GetASCIICode(unsigned char* pBuffer,unsigned char ASCII);
+# 25 "GLCD/GLCD.c" 2
+
+
+static uint8_t LCD_Code;
+# 54 "GLCD/GLCD.c"
+static void LCD_Configuration(void)
+{
+
+
+
+
+ ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIODIR |= 0x03f80000;
+ ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = 0x03f80000;
+}
+# 72 "GLCD/GLCD.c"
+static __attribute__((always_inline)) void LCD_Send (uint16_t byte)
+{
+ ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00040) )->FIODIR |= 0xFF;
+ ((1) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 21)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 21)));
+ ((0) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 19)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 19)));
+ ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00040) )->FIOPIN = byte;
+ ((1) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 20)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 20)));
+ ((0) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 20)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 20)));
+ ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00040) )->FIOPIN = byte >> 8;
+}
+# 92 "GLCD/GLCD.c"
+static void wait_delay(int count)
+{
+ while(count--);
+}
+# 105 "GLCD/GLCD.c"
+static __attribute__((always_inline)) uint16_t LCD_Read (void)
+{
+ uint16_t value;
+
+ ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00040) )->FIODIR &= ~(0xFF);
+ ((0) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 21)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 21)));;
+ ((0) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 19)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 19)));;
+ wait_delay(30);
+ value = ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00040) )->FIOPIN0;
+ ((1) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 19)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 19)));;
+ wait_delay(30);
+ value = (value << 8) | ((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00040) )->FIOPIN0;
+ ((1) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 21)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 21)));;
+ return value;
+}
+# 129 "GLCD/GLCD.c"
+static __attribute__((always_inline)) void LCD_WriteIndex(uint16_t index)
+{
+ ((0) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 22)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 22)));;
+ ((0) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 23)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 23)));;
+ ((1) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 25)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 25)));;
+ LCD_Send( index );
+ wait_delay(22);
+ ((0) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 24)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 24)));;
+ wait_delay(1);
+ ((1) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 24)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 24)));;
+ ((1) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 22)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 22)));;
+}
+# 150 "GLCD/GLCD.c"
+static __attribute__((always_inline)) void LCD_WriteData(uint16_t data)
+{
+ ((0) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 22)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 22)));;
+ ((1) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 23)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 23)));;
+ LCD_Send( data );
+ ((0) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 24)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 24)));;
+ wait_delay(1);
+ ((1) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 24)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 24)));;
+ ((1) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 22)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 22)));;
+}
+# 169 "GLCD/GLCD.c"
+static __attribute__((always_inline)) uint16_t LCD_ReadData(void)
+{
+ uint16_t value;
+
+ ((0) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 22)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 22)));;
+ ((1) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 23)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 23)));;
+ ((1) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 24)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 24)));;
+ ((0) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 25)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 25)));;
+ value = LCD_Read();
+
+ ((1) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 25)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 25)));;
+ ((1) ? (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOSET = (1 << 22)) : (((LPC_GPIO_TypeDef *) ((0x2009C000UL) + 0x00000) )->FIOCLR = (1 << 22)));;
+
+ return value;
+}
+# 194 "GLCD/GLCD.c"
+static __attribute__((always_inline)) void LCD_WriteReg(uint16_t LCD_Reg,uint16_t LCD_RegValue)
+{
+
+ LCD_WriteIndex(LCD_Reg);
+
+ LCD_WriteData(LCD_RegValue);
+}
+# 210 "GLCD/GLCD.c"
+static __attribute__((always_inline)) uint16_t LCD_ReadReg(uint16_t LCD_Reg)
+{
+ uint16_t LCD_RAM;
+
+
+ LCD_WriteIndex(LCD_Reg);
+
+ LCD_RAM = LCD_ReadData();
+ return LCD_RAM;
+}
+# 230 "GLCD/GLCD.c"
+static void LCD_SetCursor(uint16_t Xpos,uint16_t Ypos)
+{
+# 243 "GLCD/GLCD.c"
+  switch( LCD_Code )
+  {
+     default:
+          LCD_WriteReg(0x0020, Xpos );
+          LCD_WriteReg(0x0021, Ypos );
+       break;
+
+     case 4:
+     case 5:
+       LCD_WriteReg(0x004e, Xpos );
+          LCD_WriteReg(0x004f, Ypos );
+       break;
+
+     case 10:
+     case 12:
+     case 11:
+       LCD_WriteReg(0x02, Xpos>>8 );
+       LCD_WriteReg(0x03, Xpos );
+
+       LCD_WriteReg(0x06, Ypos>>8 );
+       LCD_WriteReg(0x07, Ypos );
+
+       break;
+     case 14:
+       break;
+  }
+}
+# 280 "GLCD/GLCD.c"
+static void delay_ms(uint16_t ms)
+{
+ uint16_t i,j;
+ for( i = 0; i < ms; i++ )
+ {
+  for( j = 0; j < 1141; j++ );
+ }
+}
+# 298 "GLCD/GLCD.c"
+void LCD_Initialization(void)
+{
+ uint16_t DeviceCode;
+
+ LCD_Configuration();
+ delay_ms(100);
+ DeviceCode = LCD_ReadReg(0x0000);
+
+ if( DeviceCode == 0x9325 || DeviceCode == 0x9328 )
+ {
+  LCD_Code = 1;
+  LCD_WriteReg(0x00e7,0x0010);
+  LCD_WriteReg(0x0000,0x0001);
+  LCD_WriteReg(0x0001,0x0100);
+  LCD_WriteReg(0x0002,0x0700);
+  LCD_WriteReg(0x0003,(1<<12)|(1<<5)|(1<<4)|(0<<3) );
+  LCD_WriteReg(0x0004,0x0000);
+  LCD_WriteReg(0x0008,0x0207);
+  LCD_WriteReg(0x0009,0x0000);
+  LCD_WriteReg(0x000a,0x0000);
+  LCD_WriteReg(0x000c,0x0001);
+  LCD_WriteReg(0x000d,0x0000);
+  LCD_WriteReg(0x000f,0x0000);
+
+  LCD_WriteReg(0x0010,0x0000);
+  LCD_WriteReg(0x0011,0x0007);
+  LCD_WriteReg(0x0012,0x0000);
+  LCD_WriteReg(0x0013,0x0000);
+  delay_ms(50);
+  LCD_WriteReg(0x0010,0x1590);
+  LCD_WriteReg(0x0011,0x0227);
+  delay_ms(50);
+  LCD_WriteReg(0x0012,0x009c);
+  delay_ms(50);
+  LCD_WriteReg(0x0013,0x1900);
+  LCD_WriteReg(0x0029,0x0023);
+  LCD_WriteReg(0x002b,0x000e);
+  delay_ms(50);
+  LCD_WriteReg(0x0020,0x0000);
+  LCD_WriteReg(0x0021,0x0000);
+  delay_ms(50);
+  LCD_WriteReg(0x0030,0x0007);
+  LCD_WriteReg(0x0031,0x0707);
+  LCD_WriteReg(0x0032,0x0006);
+  LCD_WriteReg(0x0035,0x0704);
+  LCD_WriteReg(0x0036,0x1f04);
+  LCD_WriteReg(0x0037,0x0004);
+  LCD_WriteReg(0x0038,0x0000);
+  LCD_WriteReg(0x0039,0x0706);
+  LCD_WriteReg(0x003c,0x0701);
+  LCD_WriteReg(0x003d,0x000f);
+  delay_ms(50);
+  LCD_WriteReg(0x0050,0x0000);
+  LCD_WriteReg(0x0051,0x00ef);
+  LCD_WriteReg(0x0052,0x0000);
+  LCD_WriteReg(0x0053,0x013f);
+  LCD_WriteReg(0x0060,0xa700);
+  LCD_WriteReg(0x0061,0x0001);
+  LCD_WriteReg(0x006a,0x0000);
+  LCD_WriteReg(0x0080,0x0000);
+  LCD_WriteReg(0x0081,0x0000);
+  LCD_WriteReg(0x0082,0x0000);
+  LCD_WriteReg(0x0083,0x0000);
+  LCD_WriteReg(0x0084,0x0000);
+  LCD_WriteReg(0x0085,0x0000);
+
+  LCD_WriteReg(0x0090,0x0010);
+  LCD_WriteReg(0x0092,0x0000);
+  LCD_WriteReg(0x0093,0x0003);
+  LCD_WriteReg(0x0095,0x0110);
+  LCD_WriteReg(0x0097,0x0000);
+  LCD_WriteReg(0x0098,0x0000);
+
+  LCD_WriteReg(0x0007,0x0133);
+
+  LCD_WriteReg(0x0020,0x0000);
+  LCD_WriteReg(0x0021,0x0000);
+ }
+
+    delay_ms(50);
+}
+# 388 "GLCD/GLCD.c"
+void LCD_Clear(uint16_t Color)
+{
+ uint32_t index;
+
+ if( LCD_Code == 11 || LCD_Code == 12 )
+ {
+  LCD_WriteReg(0x02,0x00);
+  LCD_WriteReg(0x03,0x00);
+
+  LCD_WriteReg(0x04,0x00);
+  LCD_WriteReg(0x05,0xEF);
+
+  LCD_WriteReg(0x06,0x00);
+  LCD_WriteReg(0x07,0x00);
+
+  LCD_WriteReg(0x08,0x01);
+  LCD_WriteReg(0x09,0x3F);
+ }
+ else
+ {
+  LCD_SetCursor(0,0);
+ }
+
+ LCD_WriteIndex(0x0022);
+ for( index = 0; index < 240 * 320; index++ )
+ {
+  LCD_WriteData(Color);
+ }
+}
+# 426 "GLCD/GLCD.c"
+static uint16_t LCD_BGR2RGB(uint16_t color)
+{
+ uint16_t r, g, b, rgb;
+
+ b = ( color>>0 ) & 0x1f;
+ g = ( color>>5 ) & 0x3f;
+ r = ( color>>11 ) & 0x1f;
+
+ rgb = (b<<11) + (g<<5) + (r<<0);
+
+ return( rgb );
+}
+# 448 "GLCD/GLCD.c"
+uint16_t LCD_GetPoint(uint16_t Xpos,uint16_t Ypos)
+{
+ uint16_t dummy;
+
+ LCD_SetCursor(Xpos,Ypos);
+ LCD_WriteIndex(0x0022);
+
+ switch( LCD_Code )
+ {
+  case 6:
+  case 7:
+  case 13:
+  case 5:
+  case 4:
+             dummy = LCD_ReadData();
+             dummy = LCD_ReadData();
+        return dummy;
+     case 12:
+     case 11:
+             {
+          uint8_t red,green,blue;
+
+    dummy = LCD_ReadData();
+
+          red = LCD_ReadData() >> 3;
+                green = LCD_ReadData() >> 2;
+                blue = LCD_ReadData() >> 3;
+                dummy = (uint16_t) ( ( red<<11 ) | ( green << 5 ) | blue );
+       }
+          return dummy;
+
+        default:
+             dummy = LCD_ReadData();
+             dummy = LCD_ReadData();
+        return LCD_BGR2RGB( dummy );
+ }
+}
+# 495 "GLCD/GLCD.c"
+void LCD_SetPoint(uint16_t Xpos,uint16_t Ypos,uint16_t point)
+{
+ if( Xpos >= 240 || Ypos >= 320 )
+ {
+  return;
+ }
+ LCD_SetCursor(Xpos,Ypos);
+ LCD_WriteReg(0x0022,point);
+}
+# 517 "GLCD/GLCD.c"
+void LCD_DrawLine( uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1 , uint16_t color )
+{
+    short dx,dy;
+    short temp;
+
+    if( x0 > x1 )
+    {
+     temp = x1;
+  x1 = x0;
+  x0 = temp;
+    }
+    if( y0 > y1 )
+    {
+  temp = y1;
+  y1 = y0;
+  y0 = temp;
+    }
+
+ dx = x1-x0;
+ dy = y1-y0;
+
+    if( dx == 0 )
+    {
+        do
+        {
+            LCD_SetPoint(x0, y0, color);
+            y0++;
+        }
+        while( y1 >= y0 );
+  return;
+    }
+    if( dy == 0 )
+    {
+        do
+        {
+            LCD_SetPoint(x0, y0, color);
+            x0++;
+        }
+        while( x1 >= x0 );
+  return;
+    }
+
+    if( dx > dy )
+    {
+     temp = 2 * dy - dx;
+        while( x0 != x1 )
+        {
+         LCD_SetPoint(x0,y0,color);
+         x0++;
+         if( temp > 0 )
+         {
+             y0++;
+             temp += 2 * dy - 2 * dx;
+       }
+            else
+            {
+       temp += 2 * dy;
+   }
+        }
+        LCD_SetPoint(x0,y0,color);
+    }
+    else
+    {
+     temp = 2 * dx - dy;
+        while( y0 != y1 )
+        {
+       LCD_SetPoint(x0,y0,color);
+            y0++;
+            if( temp > 0 )
+            {
+                x0++;
+                temp+=2*dy-2*dx;
+            }
+            else
+   {
+                temp += 2 * dy;
+   }
+        }
+        LCD_SetPoint(x0,y0,color);
+ }
+}
+# 611 "GLCD/GLCD.c"
+void PutChar( uint16_t Xpos, uint16_t Ypos, uint8_t ASCI, uint16_t charColor, uint16_t bkColor )
+{
+ uint16_t i, j;
+    uint8_t buffer[16], tmp_char;
+    GetASCIICode(buffer,ASCI);
+    for( i=0; i<16; i++ )
+    {
+        tmp_char = buffer[i];
+        for( j=0; j<8; j++ )
+        {
+            if( ((tmp_char >> (7 - j)) & 0x01) == 0x01 )
+            {
+                LCD_SetPoint( Xpos + j, Ypos + i, charColor );
+            }
+            else
+            {
+                LCD_SetPoint( Xpos + j, Ypos + i, bkColor );
+            }
+        }
+    }
+}
+# 645 "GLCD/GLCD.c"
+void GUI_Text(uint16_t Xpos, uint16_t Ypos, uint8_t *str,uint16_t Color, uint16_t bkColor)
+{
+    uint8_t TempChar;
+    do
+    {
+        TempChar = *str++;
+        PutChar( Xpos, Ypos, TempChar, Color, bkColor );
+        if( Xpos < 240 - 8 )
+        {
+            Xpos += 8;
+        }
+        else if ( Ypos < 320 - 16 )
+        {
+            Xpos = 0;
+            Ypos += 16;
+        }
+        else
+        {
+            Xpos = 0;
+            Ypos = 0;
+        }
+    }
+    while ( *str != 0 );
+}

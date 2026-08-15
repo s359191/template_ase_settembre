@@ -1,0 +1,235 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; ========================================
+    2 00000000         ; ========= ARITHMETIC FUNCTIONS ========= 
+    3 00000000         ; ========================================
+    4 00000000         
+    5 00000000                 AREA             arithmetic_utils, CODE, READONL
+Y
+    6 00000000                 THUMB
+    7 00000000                 PRESERVE8
+    8 00000000         
+    9 00000000         ; ==============================================
+   10 00000000         ; = EXPORTED FUNCTIONS
+   11 00000000         ; ==============================================
+   12 00000000                 EXPORT           Arith_GetModulus
+   13 00000000                 EXPORT           Arith_GetAbs
+   14 00000000                 EXPORT           Arith_CheckValueIsInRange
+   15 00000000                 EXPORT           Arith_FPDIV
+   16 00000000         
+   17 00000000         
+   18 00000000         ; ====================
+   19 00000000         ; = MODULUS OPERATOR =
+   20 00000000         ; ====================
+   21 00000000         ; Computes remainder using hardware division (udiv + mls
+                       )
+   22 00000000         ;
+   23 00000000         ; Parameters:
+   24 00000000         ;   R0 = dividend (a)
+   25 00000000         ;   R1 = divisor  (b)
+   26 00000000         ;
+   27 00000000         ; Returns:
+   28 00000000         ;   R0 = remainder (a % b)
+   29 00000000         Arith_GetModulus
+                               FUNCTION
+   30 00000000 E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr}
+   31 00000004         
+   32 00000004 FBB0 F3F1       UDIV             r3, r0, r1  ; r3 = a / b
+   33 00000008 FB03 0011       MLS              r0, r3, r1, r0 ; r0 = a - (r3 *
+                                                             b)  → remainder
+   34 0000000C         
+   35 0000000C E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+   36 00000010                 ENDFUNC
+   37 00000010         
+   38 00000010         
+   39 00000010         ; ======================
+   40 00000010         ; = GET ABSOLUTE VALUE =
+   41 00000010         ; ======================
+   42 00000010         ; Computes |R0 - R1|
+   43 00000010         ;
+   44 00000010         ; Parameters:
+   45 00000010         ;   R0 = first value
+   46 00000010         ;   R1 = second value
+   47 00000010         ;
+   48 00000010         ; Returns:
+   49 00000010         ;   R0 = absolute difference |R0 - R1|
+   50 00000010         Arith_GetAbs
+                               FUNCTION
+   51 00000010 E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr}
+   52 00000014         
+   53 00000014 4288            CMP              r0, r1
+   54 00000016 BFB4 EBC0 
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+              0001             RSBLT            r0, r0, r1  ; if r0 < r1 → r0
+                                                             = r1 - r0
+   55 0000001C 1A40            SUBGE            r0, r0, r1  ; if r0 >= r1 → r
+                                                            0 = r0 - r1
+   56 0000001E         
+   57 0000001E E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+   58 00000022                 ENDFUNC
+   59 00000022         
+   60 00000022         
+   61 00000022         ; ========================
+   62 00000022         ; = CHECK VALUE IN RANGE =
+   63 00000022         ; ========================
+   64 00000022         ; Checks if a value is within [MIN, MAX]
+   65 00000022         ;
+   66 00000022         ; Parameters:
+   67 00000022         ;   R0 = VALUE to check
+   68 00000022         ;   R1 = MIN value
+   69 00000022         ;   R2 = MAX value
+   70 00000022         ;
+   71 00000022         ; Returns:
+   72 00000022         ;   R0 = 1 if MIN <= VALUE <= MAX
+   73 00000022         ;        0 otherwise
+   74 00000022         Arith_CheckValueIsInRange
+                               FUNCTION
+   75 00000022 E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr}
+   76 00000026         
+   77 00000026 4288            CMP              r0, r1
+   78 00000028 D304            BLO              out_of_range
+   79 0000002A 4290            CMP              r0, r2
+   80 0000002C D802            BHI              out_of_range
+   81 0000002E         
+   82 0000002E F04F 0001       MOV              r0, #1      ; inside range
+   83 00000032 E001            B                exit_range_check
+   84 00000034         
+   85 00000034         out_of_range
+   86 00000034 F04F 0000       MOV              r0, #0      ; outside range
+   87 00000038         
+   88 00000038         exit_range_check
+   89 00000038 E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+   90 0000003C                 ENDFUNC
+   91 0000003C         
+   92 0000003C         
+   93 0000003C         ; ===============
+   94 0000003C         ; = FP DIVISION =
+   95 0000003C         ; ===============
+   96 0000003C         ; Floating-point division using __aeabi_fdiv
+   97 0000003C         ;
+   98 0000003C         ; Parameters:
+   99 0000003C         ;   R0 = pointer to first float (e.g. area)
+  100 0000003C         ;   R1 = pointer to second float (e.g. radius^2)
+  101 0000003C         ;
+  102 0000003C         ; Returns:
+  103 0000003C         ;   R0 = result of division (float)
+  104 0000003C                 IMPORT           __aeabi_fdiv
+  105 0000003C         Arith_FPDIV
+                               FUNCTION
+  106 0000003C E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr}
+  107 00000040         
+  108 00000040 6804            LDR              r4, [r0]    ; load first float
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+  109 00000042 680D            LDR              r5, [r1]    ; load second float
+                                                            
+  110 00000044         
+  111 00000044 4620            MOV              r0, r4
+  112 00000046 4629            MOV              r1, r5
+  113 00000048         
+  114 00000048 F7FF FFFE       BL               __aeabi_fdiv ; R0 = r0 / r1 (fl
+                                                            oat result)
+  115 0000004C         
+  116 0000004C E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+  117 00000050                 ENDFUNC
+  118 00000050         
+  119 00000050                 END
+Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M3 --depe
+nd=.\output\arith.d -o.\output\arith.o -I.\RTE\_LandTiger_LPC1768__release_ -IC
+:\Keil_v5\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include -IC:\Keil_v5\ARM\PACK\Kei
+l\LPC1700_DFP\2.7.1\Device\Include --predefine="__EVAL SETA 1" --predefine="__U
+VISION_VERSION SETA 540" --predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SET
+A 1" --list=.\output\arith.lst arith.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Arith_CheckValueIsInRange 00000022
+
+Symbol: Arith_CheckValueIsInRange
+   Definitions
+      At line 74 in file arith.s
+   Uses
+      At line 14 in file arith.s
+Comment: Arith_CheckValueIsInRange used once
+Arith_FPDIV 0000003C
+
+Symbol: Arith_FPDIV
+   Definitions
+      At line 105 in file arith.s
+   Uses
+      At line 15 in file arith.s
+Comment: Arith_FPDIV used once
+Arith_GetAbs 00000010
+
+Symbol: Arith_GetAbs
+   Definitions
+      At line 50 in file arith.s
+   Uses
+      At line 13 in file arith.s
+Comment: Arith_GetAbs used once
+Arith_GetModulus 00000000
+
+Symbol: Arith_GetModulus
+   Definitions
+      At line 29 in file arith.s
+   Uses
+      At line 12 in file arith.s
+Comment: Arith_GetModulus used once
+arithmetic_utils 00000000
+
+Symbol: arithmetic_utils
+   Definitions
+      At line 5 in file arith.s
+   Uses
+      None
+Comment: arithmetic_utils unused
+exit_range_check 00000038
+
+Symbol: exit_range_check
+   Definitions
+      At line 88 in file arith.s
+   Uses
+      At line 83 in file arith.s
+Comment: exit_range_check used once
+out_of_range 00000034
+
+Symbol: out_of_range
+   Definitions
+      At line 85 in file arith.s
+   Uses
+      At line 78 in file arith.s
+      At line 80 in file arith.s
+
+7 symbols
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+External symbols
+
+__aeabi_fdiv 00000000
+
+Symbol: __aeabi_fdiv
+   Definitions
+      At line 104 in file arith.s
+   Uses
+      At line 114 in file arith.s
+Comment: __aeabi_fdiv used once
+1 symbol
+342 symbols in table

@@ -1,0 +1,130 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; ======================================================
+                       
+    2 00000000         ; ========= ARRAY FUNCTIONS (AAPCS COMPLIANT) ==========
+                       
+    3 00000000         ; ======================================================
+                       
+    4 00000000         
+    5 00000000                 AREA             my_asm_function, CODE, READONLY
+    6 00000000                 THUMB
+    7 00000000                 PRESERVE8
+    8 00000000         
+    9 00000000         ; ==============================================
+   10 00000000         ; = IMPORTS AND EXPORTS
+   11 00000000         ; ==============================================
+   12 00000000         ; ================= IMPORTs HERE =================
+   13 00000000                 EXPORT           EXAM_FUNCTION_NAME
+   14 00000000         ; =====================================
+   15 00000000         ; = GENERAL PURPOSE ASSEMBLY FUNCTION =
+   16 00000000         ; =====================================
+   17 00000000         ; Use this as your main function template for exams.
+   18 00000000         ;
+   19 00000000         ; Parameters:
+   20 00000000         ;   R0 = first parameter
+   21 00000000         ;   R1 = second parameter
+   22 00000000         ;   R2 = third parameter
+   23 00000000         ;   R3 = fourth parameter
+   24 00000000         ;   [stack] = 5th and further parameters (if needed)
+   25 00000000         ;
+   26 00000000         ; Returns:
+   27 00000000         ;   R0 = return value
+   28 00000000         EXAM_FUNCTION_NAME
+                               FUNCTION
+   29 00000000 E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr} ; Sav
+                                                            e callee-saved regi
+                                                            sters
+   30 00000004         
+   31 00000004         ; If you need more than 4 parameters, access them from t
+                       he stack:
+   32 00000004         ; LDR   r4, [sp, #0]                ; 5th parameter
+   33 00000004         ; LDR   r5, [sp, #4]                ; 6th parameter
+   34 00000004         
+   35 00000004         
+   36 00000004         ; --- Early exit if array is empty ---
+   37 00000004         ; CMP NUM_ELEMENTS, #0
+   38 00000004 D002            BEQ              exit
+   39 00000006         
+   40 00000006         ; --- Local Variables ---
+   41 00000006         ; MOV r10, ARRAY_PTR     ; Current element address
+   42 00000006         
+   43 00000006         
+   44 00000006         main_loop
+   45 00000006         ; --- Elements Loading and bookkeeping ---
+   46 00000006 F85A 7B04       LDR              r7, [r10], #4 ; Load current el
+                                                            ement
+   47 0000000A         ; LDR     r8, [r10]        ; Load next element
+   48 0000000A         
+   49 0000000A         
+   50 0000000A         ; ================= YOUR LOGIC HERE =================
+   51 0000000A         
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   52 0000000A         
+   53 0000000A         ; --- main_loop iterations check ---
+   54 0000000A         ; SUBS    NUM_ELEMENTS, NUM_ELEMENTS, #1
+   55 0000000A DCFC            BGT              main_loop
+   56 0000000C         
+   57 0000000C         exit
+   58 0000000C         ; Return value @ R0
+   59 0000000C         ; MOV   r0, RESULT_REG
+   60 0000000C         
+   61 0000000C E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+   62 00000010                 ENDFUNC
+   63 00000010         
+   64 00000010                 END
+Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M3 --depe
+nd=.\output\asm.d -o.\output\asm.o -I.\RTE\_LandTiger_LPC1768__release_ -IC:\Ke
+il_v5\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include -IC:\Keil_v5\ARM\PACK\Keil\LP
+C1700_DFP\2.7.1\Device\Include --predefine="__EVAL SETA 1" --predefine="__UVISI
+ON_VERSION SETA 540" --predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 1"
+ --list=.\output\asm.lst asm.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+EXAM_FUNCTION_NAME 00000000
+
+Symbol: EXAM_FUNCTION_NAME
+   Definitions
+      At line 28 in file asm.s
+   Uses
+      At line 13 in file asm.s
+Comment: EXAM_FUNCTION_NAME used once
+exit 0000000C
+
+Symbol: exit
+   Definitions
+      At line 57 in file asm.s
+   Uses
+      At line 38 in file asm.s
+Comment: exit used once
+main_loop 00000006
+
+Symbol: main_loop
+   Definitions
+      At line 44 in file asm.s
+   Uses
+      At line 55 in file asm.s
+Comment: main_loop used once
+my_asm_function 00000000
+
+Symbol: my_asm_function
+   Definitions
+      At line 5 in file asm.s
+   Uses
+      None
+Comment: my_asm_function unused
+4 symbols
+338 symbols in table

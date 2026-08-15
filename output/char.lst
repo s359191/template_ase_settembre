@@ -1,0 +1,169 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; =======================================
+    2 00000000         ; ========= CHARACTER FUNCTIONS ========= 
+    3 00000000         ; =======================================
+    4 00000000         
+    5 00000000                 AREA             char_utils, CODE, READONLY
+    6 00000000                 THUMB
+    7 00000000                 PRESERVE8
+    8 00000000         
+    9 00000000         ; ==============================================
+   10 00000000         ; = EXPORTED FUNCTIONS
+   11 00000000         ; ==============================================
+   12 00000000                 EXPORT           Char_CheckLowercase
+   13 00000000                 EXPORT           Char_CheckUppercase
+   14 00000000         
+   15 00000000         
+   16 00000000         ; ====================
+   17 00000000         ; = CHECK LOWERCASE  =
+   18 00000000         ; ====================
+   19 00000000         ; Checks if the input character is a lowercase letter (a
+                       -z)
+   20 00000000         ;
+   21 00000000         ; Parameters:
+   22 00000000         ;   R0 = character to check (ASCII value)
+   23 00000000         ;
+   24 00000000         ; Returns:
+   25 00000000         ;   R0 = 1 if the character is lowercase (a-z)
+   26 00000000         ;        0 otherwise
+   27 00000000         Char_CheckLowercase
+                               FUNCTION
+   28 00000000 E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr}
+   29 00000004         
+   30 00000004 2861            CMP              r0, #'a'
+   31 00000006 DB04            BLT              not_lowercase
+   32 00000008 287A            CMP              r0, #'z'
+   33 0000000A DC02            BGT              not_lowercase
+   34 0000000C         
+   35 0000000C F04F 0001       MOV              r0, #1      ; Return 1 (true)
+   36 00000010 E001            B                exit_char_lower
+   37 00000012         
+   38 00000012         not_lowercase
+   39 00000012 F04F 0000       MOV              r0, #0      ; Return 0 (false)
+   40 00000016         
+   41 00000016         exit_char_lower
+   42 00000016 E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+   43 0000001A                 ENDFUNC
+   44 0000001A         
+   45 0000001A         
+   46 0000001A         ; ====================
+   47 0000001A         ; = CHECK UPPERCASE  =
+   48 0000001A         ; ====================
+   49 0000001A         ; Checks if the input character is an uppercase letter (
+                       A-Z)
+   50 0000001A         ;
+   51 0000001A         ; Parameters:
+   52 0000001A         ;   R0 = character to check (ASCII value)
+   53 0000001A         ;
+   54 0000001A         ; Returns:
+   55 0000001A         ;   R0 = 1 if the character is uppercase (A-Z)
+   56 0000001A         ;        0 otherwise
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   57 0000001A         Char_CheckUppercase
+                               FUNCTION
+   58 0000001A E92D 4DF0       STMFD            sp!, {r4-r8, r10-r11, lr}
+   59 0000001E         
+   60 0000001E 2841            CMP              r0, #'A'
+   61 00000020 DB04            BLT              not_uppercase
+   62 00000022 285A            CMP              r0, #'Z'
+   63 00000024 DC02            BGT              not_uppercase
+   64 00000026         
+   65 00000026 F04F 0001       MOV              r0, #1      ; Return 1 (true)
+   66 0000002A E001            B                exit_char_upper
+   67 0000002C         
+   68 0000002C         not_uppercase
+   69 0000002C F04F 0000       MOV              r0, #0      ; Return 0 (false)
+   70 00000030         
+   71 00000030         exit_char_upper
+   72 00000030 E8BD 8DF0       LDMFD            sp!, {r4-r8, r10-r11, pc}
+   73 00000034                 ENDFUNC
+   74 00000034         
+   75 00000034                 END
+Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M3 --depe
+nd=.\output\char.d -o.\output\char.o -I.\RTE\_LandTiger_LPC1768__release_ -IC:\
+Keil_v5\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include -IC:\Keil_v5\ARM\PACK\Keil\
+LPC1700_DFP\2.7.1\Device\Include --predefine="__EVAL SETA 1" --predefine="__UVI
+SION_VERSION SETA 540" --predefine="LPC175x_6x SETA 1" --predefine="_RTE_ SETA 
+1" --list=.\output\char.lst char.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Char_CheckLowercase 00000000
+
+Symbol: Char_CheckLowercase
+   Definitions
+      At line 27 in file char.s
+   Uses
+      At line 12 in file char.s
+Comment: Char_CheckLowercase used once
+Char_CheckUppercase 0000001A
+
+Symbol: Char_CheckUppercase
+   Definitions
+      At line 57 in file char.s
+   Uses
+      At line 13 in file char.s
+Comment: Char_CheckUppercase used once
+char_utils 00000000
+
+Symbol: char_utils
+   Definitions
+      At line 5 in file char.s
+   Uses
+      None
+Comment: char_utils unused
+exit_char_lower 00000016
+
+Symbol: exit_char_lower
+   Definitions
+      At line 41 in file char.s
+   Uses
+      At line 36 in file char.s
+Comment: exit_char_lower used once
+exit_char_upper 00000030
+
+Symbol: exit_char_upper
+   Definitions
+      At line 71 in file char.s
+   Uses
+      At line 66 in file char.s
+Comment: exit_char_upper used once
+not_lowercase 00000012
+
+Symbol: not_lowercase
+   Definitions
+      At line 38 in file char.s
+   Uses
+      At line 31 in file char.s
+      At line 33 in file char.s
+
+not_uppercase 0000002C
+
+Symbol: not_uppercase
+   Definitions
+      At line 68 in file char.s
+   Uses
+      At line 61 in file char.s
+      At line 63 in file char.s
+
+7 symbols
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+341 symbols in table

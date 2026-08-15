@@ -1,0 +1,225 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         ; ==================================================
+    2 00000000         ; ========= ARRAY FUNCTIONS - INSERT VALUE ========= 
+    3 00000000         ; ==================================================
+    4 00000000         
+    5 00000000                 AREA             array_insert_utils, CODE, READO
+NLY
+    6 00000000                 THUMB
+    7 00000000                 PRESERVE8
+    8 00000000         
+    9 00000000         ; ==============================================
+   10 00000000         ; = EXPORTED FUNCTIONS
+   11 00000000         ; ==============================================
+   12 00000000                 EXPORT           Array_InsertOrderedIncreasing_B
+yte
+   13 00000000                 EXPORT           Array_InsertAtBeginning_Byte
+   14 00000000                 EXPORT           Array_InsertAtEnd_Byte
+   15 00000000         
+   16 00000000         
+   17 00000000         ; ===========================
+   18 00000000         ; = INSERT VALUE INTO ARRAY =
+   19 00000000         ; ===========================
+   20 00000000         ; Inserts a new value into a sorted (ascending) byte arr
+                       ay while maintaining order.
+   21 00000000         ; Elements greater than the new value are shifted right.
+                       
+   22 00000000         ;
+   23 00000000         ; Parameters:
+   24 00000000         ;   R0 = current number of elements (N)
+   25 00000000         ;   R1 = pointer to the sorted byte array (must have spa
+                       ce for at least N+1 elements)
+   26 00000000         ;   R2 = new value to insert (byte)
+   27 00000000         ;
+   28 00000000         ; Returns:
+   29 00000000         ;   None (array is modified in place)
+   30 00000000         Array_InsertOrderedIncreasing_Byte
+                               FUNCTION
+   31 00000000 B5F0            STMFD            sp!, {r4-r7, lr}
+   32 00000002         
+   33 00000002 F1A0 0401       SUB              r4, r0, #1  ; i = N-1 (start fr
+                                                            om last element)
+   34 00000006         
+   35 00000006         loop_insert
+   36 00000006 5D0D            LDRB             r5, [r1, r4] ; load A[i]
+   37 00000008 4295            CMP              r5, r2
+   38 0000000A DD04            BLE              insert_here ; if A[i] <= new va
+                                                            lue, stop shifting
+   39 0000000C         
+   40 0000000C F104 0601       ADD              r6, r4, #1
+   41 00000010 558D            STRB             r5, [r1, r6] ; shift A[i] to A[
+                                                            i+1]
+   42 00000012 1E64            SUBS             r4, r4, #1
+   43 00000014 DAF7            BGE              loop_insert
+   44 00000016         
+   45 00000016         insert_here
+   46 00000016 F104 0401       ADD              r4, r4, #1
+   47 0000001A 550A            STRB             r2, [r1, r4] ; insert new value
+                                                             at correct positio
+                                                            n
+   48 0000001C         
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   49 0000001C BDF0            LDMFD            sp!, {r4-r7, pc}
+   50 0000001E                 ENDFUNC
+   51 0000001E         
+   52 0000001E         
+   53 0000001E         ; =====================================================
+   54 0000001E         ; = INSERT AT BEGINNING (shifts all elements right)   =
+   55 0000001E         ; =====================================================
+   56 0000001E         ; Inserts a value at the beginning of a byte array by sh
+                       ifting all elements right.
+   57 0000001E         ;
+   58 0000001E         ; Parameters:
+   59 0000001E         ;   R0 = pointer to the byte array
+   60 0000001E         ;   R1 = current number of elements (N)
+   61 0000001E         ;   R2 = value to insert at the beginning
+   62 0000001E         ;
+   63 0000001E         ; Returns:
+   64 0000001E         ;   None (array is modified in place)
+   65 0000001E         Array_InsertAtBeginning_Byte
+                               FUNCTION
+   66 0000001E B5F0            STMFD            sp!, {r4-r7, lr}
+   67 00000020         
+   68 00000020 1E4C            SUBS             r4, r1, #1  ; i = N-1
+   69 00000022 DB06            BLT              insert_begin_exit ; if N == 0, 
+                                                            just insert at [0]
+   70 00000024         
+   71 00000024         shift_right
+   72 00000024 5D05            LDRB             r5, [r0, r4]
+   73 00000026 F104 0601       ADD              r6, r4, #1
+   74 0000002A 5585            STRB             r5, [r0, r6] ; shift element ri
+                                                            ght
+   75 0000002C 1E64            SUBS             r4, r4, #1
+   76 0000002E DAF9            BGE              shift_right
+   77 00000030         
+   78 00000030 7002            STRB             r2, [r0]    ; insert new value 
+                                                            at position 0
+   79 00000032         
+   80 00000032         insert_begin_exit
+   81 00000032 BDF0            LDMFD            sp!, {r4-r7, pc}
+   82 00000034                 ENDFUNC
+   83 00000034         
+   84 00000034         
+   85 00000034         ; =====================================================
+   86 00000034         ; = INSERT AT END (if space available)                =
+   87 00000034         ; =====================================================
+   88 00000034         ; Inserts a value at the end of a byte array.
+   89 00000034         ;
+   90 00000034         ; Parameters:
+   91 00000034         ;   R0 = pointer to the byte array
+   92 00000034         ;   R1 = current number of elements (N) → insertion in
+                       dex
+   93 00000034         ;   R2 = value to insert at the end
+   94 00000034         ;
+   95 00000034         ; Returns:
+   96 00000034         ;   None (array is modified in place)
+   97 00000034         Array_InsertAtEnd_Byte
+                               FUNCTION
+   98 00000034 B510            STMFD            sp!, {r4, lr}
+   99 00000036         
+  100 00000036 5442            STRB             r2, [r0, r1] ; VETT[N] = val
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+  101 00000038         
+  102 00000038 BD10            LDMFD            sp!, {r4, pc}
+  103 0000003A                 ENDFUNC
+  104 0000003A         
+  105 0000003A                 END
+Command Line: --debug --xref --diag_suppress=9931,A1950W --cpu=Cortex-M3 --depe
+nd=.\output\array_insert.d -o.\output\array_insert.o -I.\RTE\_LandTiger_LPC1768
+__release_ -IC:\Keil_v5\ARM\PACK\ARM\CMSIS\6.1.0\CMSIS\Core\Include -IC:\Keil_v
+5\ARM\PACK\Keil\LPC1700_DFP\2.7.1\Device\Include --predefine="__EVAL SETA 1" --
+predefine="__UVISION_VERSION SETA 540" --predefine="LPC175x_6x SETA 1" --predef
+ine="_RTE_ SETA 1" --list=.\output\array_insert.lst array_insert.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+Array_InsertAtBeginning_Byte 0000001E
+
+Symbol: Array_InsertAtBeginning_Byte
+   Definitions
+      At line 65 in file array_insert.s
+   Uses
+      At line 13 in file array_insert.s
+Comment: Array_InsertAtBeginning_Byte used once
+Array_InsertAtEnd_Byte 00000034
+
+Symbol: Array_InsertAtEnd_Byte
+   Definitions
+      At line 97 in file array_insert.s
+   Uses
+      At line 14 in file array_insert.s
+Comment: Array_InsertAtEnd_Byte used once
+Array_InsertOrderedIncreasing_Byte 00000000
+
+Symbol: Array_InsertOrderedIncreasing_Byte
+   Definitions
+      At line 30 in file array_insert.s
+   Uses
+      At line 12 in file array_insert.s
+Comment: Array_InsertOrderedIncreasing_Byte used once
+array_insert_utils 00000000
+
+Symbol: array_insert_utils
+   Definitions
+      At line 5 in file array_insert.s
+   Uses
+      None
+Comment: array_insert_utils unused
+insert_begin_exit 00000032
+
+Symbol: insert_begin_exit
+   Definitions
+      At line 80 in file array_insert.s
+   Uses
+      At line 69 in file array_insert.s
+Comment: insert_begin_exit used once
+insert_here 00000016
+
+Symbol: insert_here
+   Definitions
+      At line 45 in file array_insert.s
+   Uses
+      At line 38 in file array_insert.s
+Comment: insert_here used once
+loop_insert 00000006
+
+Symbol: loop_insert
+   Definitions
+      At line 35 in file array_insert.s
+   Uses
+      At line 43 in file array_insert.s
+Comment: loop_insert used once
+shift_right 00000024
+
+Symbol: shift_right
+
+
+
+ARM Macro Assembler    Page 2 Alphabetic symbol ordering
+Relocatable symbols
+
+   Definitions
+      At line 71 in file array_insert.s
+   Uses
+      At line 76 in file array_insert.s
+Comment: shift_right used once
+8 symbols
+342 symbols in table
